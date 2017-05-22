@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Djangazon Profile</title>
+</head>
+<body>
+
+	{% include 'navbar.html' %}
+	{% if user.is_authenticated %}
+		<h4>Account Information</h4>
+		<span>Username:</span>{{user.username}}
+		<span>First Name:</span>{{user.first_name}}
+		<span>Last Name:</span>{{user.last_name}}
+		<span>Email:</span>{{user.email}}
+		<span>Password:</span>{{user.password}}
+	{% endif %}
+
+	<button><a href="payment_types">Add a Payment Type</a></button>
+
+</body>
+</html>

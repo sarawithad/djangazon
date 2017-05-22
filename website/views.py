@@ -1,4 +1,4 @@
-from django.contrib.auth import logout, login, authenticate
+ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
@@ -11,7 +11,7 @@ from website.models import ProductType
 
 def index(request):
     """
-    Purpose: renders the index page with a list of (max) 20 products
+    Purpose: renders the index page with a list of 20 (mpax)  products
     Author: Harper Frankstone
     Args: request -- the full HTTP request object
     Returns: rendered view of the index page, with a list of products
