@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Bangazon</title>
+</head>
+<body>
+	<nav>
+		<ul>
+			{% if user.is_authenticated %}
+			<h1>Hello {{ user.username }}!</h1>
+			<a href="{% url 'website:list_products' %}">All Products</a>
+			<a href="{% url 'website:sell' %}">Sell Products</a>
+			<a href="{% url 'website:profile %}">My Profile</a>
+			<a href="{% url 'website:logout' %}">Logout</a>
+			{% else %}
+			<h1>Bangazon says...</h1>
+			<div><a href="{% url 'website:register' %}">Register</a></div>
+			<div><a href="{% url 'website:login' %}">Login</a></div>
+			{% endif %}
+
+		</ul>
+	</nav>
+</body>
+</html>
