@@ -8,7 +8,7 @@ from website.forms import UserForm, ProductForm
 from website.models import Product
 from website.models import ProductType
 from website.models import Profile
-
+# standard Django view: query, template name, and a render method to render the data from the query into the s
 
 def index(request):
     """

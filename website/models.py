@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
-class Profile(User):
+class Profile(models.Model):
     """
     purpose: Instantiates a customer, and pulls in Django's default user model
     author: Max Baldridge
