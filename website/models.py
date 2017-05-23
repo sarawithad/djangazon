@@ -5,7 +5,7 @@ from django.db import models
 from django.utils import timezone
 
 # Create your models here.
-class Profile(User):
+class Profile(models.Model):
     """
     purpose: Instantiates a customer, and pulls in Django's default user model
     author: Max Baldridge
@@ -16,7 +16,6 @@ class Profile(User):
 
     def __str__(self):  # __unicode__ on Python 2
         return "This user's name is {}".format(self.user.first_name)
-
 
 
 class ProductType(models.Model):
@@ -47,7 +46,7 @@ class Product(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False)
-    quantity = models.IntegerField(max_length=100)
+    quantity = models.IntegerField()
     # date_added = models.DateTimeField('Date Added')
 
 
@@ -73,7 +72,7 @@ class PaymentType(models.Model):
     returns: (None): N/A
     """   
     payment_type_name = models.CharField(max_length=15)
-    account_number = models.IntegerField(max_length=25)
+    account_number = models.IntegerField()
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     
 

@@ -7,11 +7,12 @@ from django.template import RequestContext
 from website.forms import UserForm, ProductForm
 from website.models import Product
 from website.models import ProductType
-
+from website.models import Profile
+# standard Django view: query, template name, and a render method to render the data from the query into the s
 
 def index(request):
     """
-    Purpose: renders the index page with a list of (max) 20 products
+    Purpose: renders the index page with a list of 20 (mpax)  products
     Author: Harper Frankstone
     Args: request -- the full HTTP request object
     Returns: rendered view of the index page, with a list of products
@@ -100,9 +101,15 @@ def user_logout(request):
 
 @login_required(login_url='/login')
 def sell_product(request):
+    """
+    Purpose: to present the user with a form to upload information about a product to sell
+    Author: Boilerplate code
+    Args: request -- the full HTTP request object
+    Returns: a form that lets a user upload a product to sell
+    """
     if request.method == 'GET':
         product_form = ProductForm()
-        template_name = 'product/create.html'
+        template_name = 'create.html'
         return render(request, template_name, {'product_form': product_form})
 
     elif request.method == 'POST':
@@ -117,13 +124,19 @@ def sell_product(request):
             product_type = pt,
         )
         p.save()
-        template_name = 'product/success.html'
+        template_name = 'success.html'
         return render(request, template_name, {})
 
 
 def list_products(request):
+    """
+    Purpose: to render a view with a list of all products
+    Author: Boilerplate code
+    Args: request -- the full HTTP request object
+    Returns: a rendered view of a list of products
+    """
     all_products = Product.objects.all()
-    template_name = 'product/list.html'
+    template_name = 'list.html'
     return render(request, template_name, {'products': all_products})
 
 def single_product(request, product_id):
@@ -139,11 +152,23 @@ def single_product(request, product_id):
 
     returns: (render): a view of the request, template to use, and product obj
     """        
-    template_name = 'product/single.html'
+    template_name = 'single.html'
     product = get_object_or_404(Product, pk=product_id)            
     return render(request, template_name, {
         "product": product})
 
+
+
+@login_required(login_url='/login')
+def profile(request): 
+    """
+    Purpose: to render the profile page in the browser
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object
+    Returns: 
+    """
+    template_name = 'profile.html'
+    return render(request, template_name, {})
 
 
 # @login_required(login_url='/login')
@@ -151,7 +176,7 @@ def single_product(request, product_id):
 #         """
 #     purpose: Allows user to add a product to their cart
 
-#     author: 
+#     author: Dara Thomas
 
 #     args:  
 
@@ -184,10 +209,11 @@ def single_product(request, product_id):
 #     """
 #     purpose: Allows user to add a payment type to their order and therefore complete and place the order
 
-#     author: 
+#     author: Dara Thomas
 
 #     args:  
 
 #     returns: a checkout page where the user sees their order total and can select a payment type for their order
 #     """    
 #     template_name = 'checkout.html'
+
