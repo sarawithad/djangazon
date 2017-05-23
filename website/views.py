@@ -4,10 +4,11 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
 from django.template import RequestContext
 
-from website.forms import UserForm, ProductForm
+from website.forms import UserForm, ProductForm, PaymentTypeForm
 from website.models import Product
 from website.models import ProductType
 from website.models import Profile
+from website.models import PaymentType
 # standard Django view: query, template name, and a render method to render the data from the query into the s
 
 def index(request):
@@ -202,6 +203,43 @@ def profile(request):
     """
     template_name = 'profile.html'
     return render(request, template_name, {})
+
+
+@login_required(login_url='/login')
+def add_payment_type(request):
+    """
+    Purpose: to present the user with a form to add a payment type to their account
+    Author: Aaron Barfoot
+    Args: request -- the full HTTP request object
+    Returns: a form that lets a user add a payment type to their account
+    """
+    if request.method == 'GET':
+        payment_type_form = PaymentTypeForm()
+        template_name = 'add_payment_type.html'
+        return render(request, template_name, {'payment_type_form': payment_type_form})
+
+    elif request.method == 'POST':
+        form_data = request.POST
+        pmt = PaymentType(
+            customer = request.user,
+            payment_type_name = form_data['payment_type_name'],
+            account_number = form_data['account_number'],
+        )
+        pmt.save()
+        template_name = 'payment_type_success.html'
+        return render(request, template_name, {})
+
+@login_required(login_url='/login')
+def user_payment_types(request):
+    """
+    Purpose: To retrieve a list of all payment types associated with user
+    Author: Aaron Barfoot
+    Args: request -- the full HTTP request object
+    Returns: list of payment types associated with current user.
+    """
+    user_payment_types = PaymentType.objects.filter(customer = request.user)
+    template_name = 'user_payment_types.html'
+    return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
 
 # @login_required(login_url='/login')

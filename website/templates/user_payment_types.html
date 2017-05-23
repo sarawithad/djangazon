@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% load staticfiles %}
+
+    <h3>Your Payment Types</h3>
+
+    <ol>
+    {% for payment_type in user_payment_types %}
+        <li>{{ payment_type.payment_type_name }}</li>
+    {% endfor %}
+    </ol>
+
+{% endblock %}
