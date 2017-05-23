@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^products$', views.list_products, name='list_products'),
     url(r'^single_product/(?P<product_id>[0-9]+)/$', views.single_product, name='single_product'),
     url(r'^product_types$', views.list_product_types, name='product_types'),
+    url(r'^product_type_products/(?P<type_id>[0-9]+)/$', views.get_product_types, name='get_product_types'),
 ]

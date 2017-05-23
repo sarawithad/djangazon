@@ -175,8 +175,22 @@ def list_product_types(request):
 
     return render(request, 'product_types.html', {'product_types': product_types})
 
+def get_product_types(request, type_id):
+    """
+    Purpose: To allow a hyperlink to a specific URL (with the parameter type_id)
+    to display a product category, and a list of products assigned to that category
+    and their products.
+    Author: Jordan Nelson
+    Args: type_id
+    Returns: Combines a given template with a given context dictionary and 
+    returns an HttpResponse object with that rendered text.
+    """
+    product_types = ProductType.objects.all().filter(pk=type_id)
+    products_of_type = Product.objects.all().filter(product_type=type_id)
 
-
+    context = { 'product_types' : product_types, 'products_of_type' : products_of_type }
+    
+    return render(request, 'product_type_products.html', context )
 
 @login_required(login_url='/login')
 def profile(request): 
