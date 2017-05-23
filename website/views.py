@@ -7,6 +7,7 @@ from django.template import RequestContext
 from website.forms import UserForm, ProductForm
 from website.models import Product
 from website.models import ProductType
+from .models import *
 
 
 def index(request):
@@ -143,6 +144,24 @@ def single_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)            
     return render(request, template_name, {
         "product": product})
+
+def list_product_types(request):
+    """
+    Purpose: To retrieve a list of all products & product_types from
+    their respective tables so that a template may sort through and filter
+    the results.
+    Author: Jordan Nelson
+    Args: None
+    Returns: Combines a given template with a given context dictionary and 
+    returns an HttpResponse object with that rendered text.
+    """
+    product_list = Product.objects.all()
+    product_types = ProductType.objects.all()
+
+    context = { 'products': product_list, 'product_types': product_types }
+
+    return render(request, 'product/product_types.html', context)
+
 
 
 

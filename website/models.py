@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 class Profile(User):
@@ -34,6 +35,11 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False)
     quantity = models.IntegerField()
 
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return "/single_product/{}".format(self.id)
 
 
 
