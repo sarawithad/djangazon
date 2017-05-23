@@ -1,4 +1,4 @@
- from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render
@@ -144,5 +144,12 @@ def single_product(request, product_id):
     return render(request, template_name, {
         "product": product})
 
-
-
+def profile(request): 
+    """
+    Purpose: to render the profile page in the browser
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object
+    Returns: 
+    """
+    template_name = 'profile.html'
+    return render(request, template_name, {})

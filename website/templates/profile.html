@@ -4,17 +4,18 @@
 	<title>Djangazon Profile</title>
 </head>
 <body>
-
 	{% include 'navbar.html' %}
+
 	{% if user.is_authenticated %}
 		<h4>Account Information</h4>
-		<span>Username:</span>{{user.username}}
-		<span>First Name:</span>{{user.first_name}}
-		<span>Last Name:</span>{{user.last_name}}
-		<span>Email:</span>{{user.email}}
-		<span>Password:</span>{{user.password}}
+		<p><strong>Username:</strong></p>{{user.username}}
+		<p><strong>First Name:</strong></p>{{user.first_name}}
+		<p><strong>Last Name:</strong></p>{{user.last_name}}
+		<p><strong>Email:</strong></p>{{user.email}}
+		<p><strong>Password:</strong></p>{{user.password}}
 	{% endif %}
-
+	<br>
+	<hr>
 	<button><a href="payment_types">Add a Payment Type</a></button>
 
 </body>
