@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% load staticfiles %}
+
+    <h3>Add New Payment Type</h3>
+
+
+    <form action="{% url 'website:add_payment_type' %}" method="post">
+      {% csrf_token %}
+      {{ payment_type_form.as_p }}
+      <input type="submit" href="/user_payment_types" value="Add Payment Type" />
+    </form>
+
+{% endblock %}

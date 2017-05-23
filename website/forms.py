@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django import forms
 from website.models import Product
+from website.models import PaymentType
 
 
 class UserForm(forms.ModelForm):
@@ -15,3 +16,9 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ('title', 'description', 'price', 'quantity', 'product_type')
+
+class PaymentTypeForm(forms.ModelForm):
+
+	class Meta:
+		model = PaymentType
+		fields = ('payment_type_name', 'account_number')        
