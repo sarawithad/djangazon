@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Bangazon</title>
-    </head>
+{% extends 'navbar.html' %}
 
-    <body>
-        <h1>Register with Bangazon</h1>
+{% block content %}
+
+        <h3>Register with Bangazon</h3>
 
         {% if registered %}
         <strong>Thank you for registering!</strong>
@@ -27,5 +24,4 @@
             <input type="submit" name="submit" value="Register" />
         </form>
         {% endif %}
-    </body>
-</html>
+{% endblock %}

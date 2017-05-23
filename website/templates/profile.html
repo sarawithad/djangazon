@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Djangazon Profile</title>
-</head>
-<body>
-	{% include 'navbar.html' %}
+{% extends 'navbar.html' %}
+
+{% block content %}
 
 	{% if user.is_authenticated %}
 		<h4>Account Information</h4>
@@ -18,5 +14,4 @@
 	<hr>
 	<button><a href="payment_types">Add a Payment Type</a></button>
 
-</body>
-</html>
+{% endblock %}

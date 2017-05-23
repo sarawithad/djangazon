@@ -15,7 +15,6 @@ class Profile(User):
         return "This user's name is {}".format(self.user.first_name)
 
 
-
 class ProductType(models.Model):
     product_type_name = models.CharField(max_length=255, null=True)
 

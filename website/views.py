@@ -7,6 +7,7 @@ from django.template import RequestContext
 from website.forms import UserForm, ProductForm
 from website.models import Product
 from website.models import ProductType
+from website.models import Profile
 
 
 def index(request):
@@ -100,6 +101,12 @@ def user_logout(request):
 
 @login_required(login_url='/login')
 def sell_product(request):
+    """
+    Purpose: to present the user with a form to upload information about a product to sell
+    Author: Boilerplate code
+    Args: request -- the full HTTP request object
+    Returns: a form that lets a user upload a product to sell
+    """
     if request.method == 'GET':
         product_form = ProductForm()
         template_name = 'product/create.html'
@@ -122,6 +129,12 @@ def sell_product(request):
 
 
 def list_products(request):
+    """
+    Purpose: to render a view with a list of all products
+    Author: Boilerplate code
+    Args: request -- the full HTTP request object
+    Returns: a rendered view of a list of products
+    """
     all_products = Product.objects.all()
     template_name = 'product/list.html'
     return render(request, template_name, {'products': all_products})
@@ -144,6 +157,8 @@ def single_product(request, product_id):
     return render(request, template_name, {
         "product": product})
 
+
+@login_required(login_url='/login')
 def profile(request): 
     """
     Purpose: to render the profile page in the browser

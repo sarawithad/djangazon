@@ -1,26 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Bangazon</title>
+	{% block title %}
+	<title>Djangazon</title>
+	{% endblock %}
+	<!-- load all scripts and css links here, remember {% load static %} -->
 </head>
 <body>
+
+	{% block navbar %}
 	<nav>
-	<h2>Djangazon</h2>
+	<h1>Djangazon, LLC</h1>
 		<ul>
 			{% if user.is_authenticated %}
-			<h1>Hello {{ user.username }}!</h1>
+			<h2>Hello {{ user.username }}!</h2>
+			<a href="{% url 'website:index' %}">Home</a>
 			<a href="{% url 'website:list_products' %}">All Products</a>
 			<a href="{% url 'website:sell' %}">Sell Products</a>
-			<a href="{% url 'website:profile %}">My Profile</a>
+			<a href="{% url 'website:profile' %}">My Profile</a>
 			<a href="{% url 'website:logout' %}">Logout</a>
 			{% else %}
-			<h1>Bangazon says...</h1>
+			<h2>Djangazon says...</h2>
 			<div><a href="{% url 'website:register' %}">Register</a></div>
 			<div><a href="{% url 'website:login' %}">Login</a></div>
 			{% endif %}
-
 		</ul>
 	</nav>
+	{% endblock %}
+
+	<!-- other templates will be included here, much like injected partials in AngularJS -->
+	{% block content %}{% endblock %}
+
+
 </body>
 </html>
