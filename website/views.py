@@ -155,12 +155,13 @@ def list_product_types(request):
     Returns: Combines a given template with a given context dictionary and 
     returns an HttpResponse object with that rendered text.
     """
-    product_list = Product.objects.all()
     product_types = ProductType.objects.all()
 
-    context = { 'products': product_list, 'product_types': product_types }
+    for pt in product_types:
+        pt.num_products = pt.product_set.filter(product_type=pt.id).count()
+        pt.products = pt.product_set.filter(product_type=pt.id)
 
-    return render(request, 'product/product_types.html', context)
+    return render(request, 'product/product_types.html', {'product_types': product_types})
 
 
 

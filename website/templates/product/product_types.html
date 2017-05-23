@@ -3,25 +3,13 @@
 <h1>Product Types</h1>
 
 <ol>
-	{% for product_type in product_types %}
-		<li>
-			{{ product_type.product_type_name }} 
-			({{ product_type.product_set.count }})
-		</li>
+	{% for producttype in product_types %}
+		<li> {{ producttype.product_type_name }}  ({{ producttype.num_products }}) </li>
 
-		{% for product in products %} 
-
-			{% if product.product_type_id == product_type.id %}
-				<p> <a href="{{ product.get_absolute_url }}"> {{ product.title }} </a> </p>
-			{% endif %}
-			
-			{% empty %}
-			<p> No Products </p>
-
+		{% for product in producttype.products %}
+			<a href="{{ product.get_absolute_url }}"> {{ product.title }} </a>
+			<br />
 		{% endfor %}
 
-		{% empty %}
-		<p> No Product Types </p>
-
-    {% endfor %}
+	{% endfor %}
  </ol>
