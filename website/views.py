@@ -7,7 +7,6 @@ from django.template import RequestContext
 from website.forms import UserForm, ProductForm
 from website.models import Product
 from website.models import ProductType
-from .models import *
 
 
 def index(request):
@@ -155,13 +154,13 @@ def list_product_types(request):
     Returns: Combines a given template with a given context dictionary and 
     returns an HttpResponse object with that rendered text.
     """
-    product_types = ProductType.objects.all()
+    product_types = ProductType.objects.all().order_by('-pk')
 
     for pt in product_types:
         pt.num_products = pt.product_set.filter(product_type=pt.id).count()
-        pt.products = pt.product_set.filter(product_type=pt.id)
+        pt.products = pt.product_set.filter(product_type=pt.id).order_by('-pk')[:3]
 
-    return render(request, 'product/product_types.html', {'product_types': product_types})
+    return render(request, 'product_types.html', {'product_types': product_types})
 
 
 
