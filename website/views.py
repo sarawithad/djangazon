@@ -109,7 +109,7 @@ def sell_product(request):
     """
     if request.method == 'GET':
         product_form = ProductForm()
-        template_name = 'product/create.html'
+        template_name = 'create.html'
         return render(request, template_name, {'product_form': product_form})
 
     elif request.method == 'POST':
@@ -124,7 +124,7 @@ def sell_product(request):
             product_type = pt,
         )
         p.save()
-        template_name = 'product/success.html'
+        template_name = 'success.html'
         return render(request, template_name, {})
 
 
@@ -136,7 +136,7 @@ def list_products(request):
     Returns: a rendered view of a list of products
     """
     all_products = Product.objects.all()
-    template_name = 'product/list.html'
+    template_name = 'list.html'
     return render(request, template_name, {'products': all_products})
 
 def single_product(request, product_id):
@@ -152,7 +152,7 @@ def single_product(request, product_id):
 
     returns: (render): a view of the request, template to use, and product obj
     """        
-    template_name = 'product/single.html'
+    template_name = 'single.html'
     product = get_object_or_404(Product, pk=product_id)            
     return render(request, template_name, {
         "product": product})
