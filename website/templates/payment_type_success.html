@@ -1,0 +1,11 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% load staticfiles %}
+
+    <h1>Payment Type Added Successfully!</h1>
+
+    <a href="{% url 'website:user_payment_types' %}">View All Payment Types</a>
+
+{% endblock %}
