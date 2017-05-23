@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
+from django.core.urlresolvers import reverse
 from django.utils import timezone
 
 # Create your models here.
@@ -92,6 +93,11 @@ class Order(models.Model):
     # def __str__(self):
     #     return self.order_date
 
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return "/single_product/{}".format(self.id)
 
 
 class ProductOrder(models.Model):

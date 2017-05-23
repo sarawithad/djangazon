@@ -157,6 +157,25 @@ def single_product(request, product_id):
     return render(request, template_name, {
         "product": product})
 
+def list_product_types(request):
+    """
+    Purpose: To retrieve a list of all products & product_types from
+    their respective tables so that a template may sort through and filter
+    the results.
+    Author: Jordan Nelson
+    Args: None
+    Returns: Combines a given template with a given context dictionary and 
+    returns an HttpResponse object with that rendered text.
+    """
+    product_types = ProductType.objects.all().order_by('-pk')
+
+    for pt in product_types:
+        pt.num_products = pt.product_set.filter(product_type=pt.id).count()
+        pt.products = pt.product_set.filter(product_type=pt.id).order_by('-pk')[:3]
+
+    return render(request, 'product_types.html', {'product_types': product_types})
+
+
 
 
 @login_required(login_url='/login')

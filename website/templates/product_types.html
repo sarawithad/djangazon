@@ -1,0 +1,13 @@
+<h1>Product Types</h1>
+
+<ol>
+	{% for producttype in product_types %}
+		<li> {{ producttype.product_type_name }}  ({{ producttype.num_products }}) </li>
+
+		{% for product in producttype.products %}
+			<a href="{{ product.get_absolute_url }}"> {{ product.title }} </a>
+			<br />
+		{% endfor %}
+
+	{% endfor %}
+ </ol>
