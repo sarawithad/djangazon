@@ -5,7 +5,9 @@
 
 <ol>
 	{% for producttype in product_types %}
-		<li> {{ producttype.product_type_name }}  ({{ producttype.num_products }}) </li>
+		<li> 
+		<a href="{{ producttype.get_absolute_url }}"> {{ producttype.product_type_name }} </a>
+		({{ producttype.num_products }}) </li>
 
 		{% for product in producttype.products %}
 			<a href="{{ product.get_absolute_url }}"> {{ product.title }} </a>

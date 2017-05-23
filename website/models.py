@@ -31,6 +31,8 @@ class ProductType(models.Model):
     def __str__(self):
         return self.product_type_name
 
+    def get_absolute_url(self):
+        return "/product_type_products/{}".format(self.id)
 
 class Product(models.Model):
     """
