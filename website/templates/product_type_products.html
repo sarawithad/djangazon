@@ -10,11 +10,9 @@
 
 	Products: <br />
 		{% for product in products_of_type %} <br />
-			Title: {{ product.title }} <br />
-			Desc: {{ product.description }} <br />
+			Title: <a href="{{ product.get_absolute_url }}"> {{ product.title }} </a> <br />
 			Price: {{ product.price }} <br />
 			Quantity: {{ product.quantity }} <br />
-			Seller: {{ product.seller.first_name }} {{ product.seller.last_name }}<br />
 		{% endfor %}
 
  {% endblock %}

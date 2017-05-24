@@ -6,31 +6,17 @@
 	<title>Djangazon</title>
 	{% endblock %}
 	<!-- load all scripts and css links here, remember {% load static %} -->
+	{%include "styles.html"%}
 </head>
 <body>
+	{%include "navbar.html"%}
+	<h1>WELCOME TO BANGAZON!</h1>
+	{% if user.is_authenticated %}
+    <h1>Bangazon says... hello {{ user.username }}!</h1>
+    {% endif %}
 
-	{% block navbar %}
-	<nav>
-	<h1>Djangazon, LLC</h1>
-		<ul>
-			{% if user.is_authenticated %}
-			<h2>Hello {{ user.username }}!</h2>
-			<a href="{% url 'website:index' %}">Home</a>
-			<a href="{% url 'website:product_types' %}">All Products</a>
-			<a href="{% url 'website:sell' %}">Sell Products</a>
-			<a href="{% url 'website:profile' %}">My Profile</a>
-			<a href="{% url 'website:logout' %}">Logout</a>
-			{% else %}
-			<h2>Djangazon says...</h2>
-			<div><a href="{% url 'website:register' %}">Register</a></div>
-			<div><a href="{% url 'website:login' %}">Login</a></div>
-			{% endif %}
-		</ul>
-	</nav>
-	{% endblock %}
 
 	{% block content %}{% endblock %}
-
 
 </body>
 </html>

@@ -16,7 +16,7 @@
      "pk": 2,
      "fields": {
        "seller": 1,
-       "product_type": 2,
+       "product_type": 1,
        "title": "Small bag of gummy bears",
        "description": "A bag of gummy bears to share with yourself",
        "price": 2.99,
@@ -45,6 +45,222 @@
        "description": "Don't Let Him In!",
        "price": 666.00,
        "quantity": 1
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 5,
+     "fields": {
+       "seller": 1,
+       "product_type": 2,
+       "title": "boolean",
+       "description": "one thing, or another",
+       "price": 5.99,
+       "quantity": 2
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 6,
+     "fields": {
+       "seller": 1,
+       "product_type": 2,
+       "title": "your mom",
+       "description": "DORTHY MANTOOTH IS A SAINT!",
+       "price": 2.99,
+       "quantity": 5
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 7,
+     "fields": {
+       "seller": 1,
+       "product_type": 3,
+       "title": "rose's necklace",
+       "description": "why the hell did she drop that necklace",
+       "price": 15000.05,
+       "quantity": 1
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 8,
+     "fields": {
+       "seller": 1,
+       "product_type": 4,
+       "title": "The Boogie",
+       "description": "He's a nightmare.",
+       "price": 69.69,
+       "quantity": 1
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 9,
+     "fields": {
+       "seller": 1,
+       "product_type": 1,
+       "title": "Giant bag of Gummy Bears",
+       "description": "A bag of gummy bears to share with anyone you meet on the street",
+       "price": 5.99,
+       "quantity": 2
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 10,
+     "fields": {
+       "seller": 1,
+       "product_type": 1,
+       "title": "Dime bag of gummy bears",
+       "description": "Like, two gummy bears....maybe",
+       "price": 0.10,
+       "quantity": 23
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 11,
+     "fields": {
+       "seller": 1,
+       "product_type": 3,
+       "title": "Sort of a raft",
+       "description": "They totally could have fit both of them on there.",
+       "price": 150.25,
+       "quantity": 100
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 12,
+     "fields": {
+       "seller": 1,
+       "product_type": 4,
+       "title": "Candy Man",
+       "description": "Because he mixes it with hate and kills you",
+       "price": 6.66,
+       "quantity": 1
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 13,
+     "fields": {
+       "seller": 1,
+       "product_type": 1,
+       "title": "Obscenely Large bag of Gummy Bears",
+       "description": "A bag of gummy bears to share with your entire extended family",
+       "price": 105.99,
+       "quantity": 4
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 14,
+     "fields": {
+       "seller": 1,
+       "product_type": 2,
+       "title": "Free Gift",
+       "description": "Whatever we find stuck under someone's desk.",
+       "price": 0.00,
+       "quantity": 5
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 15,
+     "fields": {
+       "seller": 1,
+       "product_type": 3,
+       "title": "That car",
+       "description": "The windows are fogged, and it needs a good washing on the inside.",
+       "price": 1908.25,
+       "quantity": 69
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 16,
+     "fields": {
+       "seller": 1,
+       "product_type": 4,
+       "title": "Jeeper's Creepers",
+       "description": "He's a pretty reckless driver.",
+       "price": 666.00,
+       "quantity": 1
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 17,
+     "fields": {
+       "seller": 1,
+       "product_type": 1,
+       "title": "A Single Gummy Bear",
+       "description": "Who eats just one of these?",
+       "price": 0.10,
+       "quantity": 1000000000000
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 18,
+     "fields": {
+       "seller": 1,
+       "product_type": 2,
+       "title": "Rainbow Flag",
+       "description": "Follow it for a 'pot of gold'.",
+       "price": 2.99,
+       "quantity": 5
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 19,
+     "fields": {
+       "seller": 1,
+       "product_type": 3,
+       "title": "Piece of an iceburg",
+       "description": "She were a fine 'berg that didn't fly anywhere. A boat hit it.",
+       "price": 150.25,
+       "quantity": 100
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 20,
+     "fields": {
+       "seller": 1,
+       "product_type": 4,
+       "title": "Scary Mask",
+       "description": "It's not really that scary.",
+       "price": 10.00,
+       "quantity": 5
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 21,
+     "fields": {
+       "seller": 1,
+       "product_type": 2,
+       "title": "Captain's Hat",
+       "description": "If he wsn't drunk when he hit the 'berg, she sure as hell is now.",
+       "price": 15.25,
+       "quantity": 100
+     }
+   },
+   {
+     "model": "website.Product",
+     "pk": 22,
+     "fields": {
+       "seller": 1,
+       "product_type": 4,
+       "title": "Clown Nose",
+       "description": "Probably the scariest thing we have for sale.",
+       "price": 4.20,
+       "quantity": 5
      }
    }
  ]
