@@ -243,6 +243,7 @@ def user_payment_types(request):
     template_name = 'user_payment_types.html'
     return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
+@login_required(login_url='/login')
 def add_product_to_order(request, product_id):
     """
     Purpose: To add a product (by the product id) to the ProductOrder table.
@@ -263,21 +264,38 @@ def add_product_to_order(request, product_id):
 
     return HttpResponseRedirect('/cart')
 
+@login_required(login_url='/login')
 def view_cart(request):
-    return render(request, 'cart.html', {} )
+    """
+    Purpose: To view the cart of a customer's products
+    Author: Jordan Nelson & Harper Frankstone
+    Args: None
+    Returns: A list of the products added to a shopping cart and their total
+    """
+    try:
+        customer = request.user
+        order_id = Order.objects.get(customer=customer, active=1).id
+    except ObjectDoesNotExist:
+        pass # WE MUST DO SOMETHING HERE
 
+    products_in_cart = ProductOrder.objects.all().filter(order=order_id)
 
+    total = 0
+    for product in products_in_cart:
+        total += product.product.price
 
-# @login_required(login_url='/login')
-# def complete_order_add_payment():
-#     """
-#     purpose: Allows user to add a payment type to their order and therefore complete and place the order
+    return render(request, 'cart.html', { 'products_in_cart' : products_in_cart, 'total' : total } )
 
-#     author: Dara Thomas
+@login_required(login_url='/login')
+def complete_order_add_payment():
+    """
+    purpose: Allows user to add a payment type to their order and therefore complete and place the order
 
-#     args:  
+    author: Dara Thomas
 
-#     returns: a checkout page where the user sees their order total and can select a payment type for their order
-#     """    
-#     template_name = 'checkout.html'
+    args:  
+
+    returns: a checkout page where the user sees their order total and can select a payment type for their order
+    """    
+    template_name = 'checkout.html'
 

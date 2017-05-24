@@ -1,21 +1,38 @@
+{% extends 'main.html' %}
+{% block content %}
+
 {% load staticfiles %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Bangazon</title>
-  </head>
-  <body>
 
-    <h1>My Cart</h1>
+      <h1>My Cart</h1>
+    {% if products_in_cart is not Null %}
+      <table> 
+        <tr>
+          <th>Product Name</th>
+          <th>Product Price</th>
+        </tr>
+      {% for product in products_in_cart %}
+        <tr>
+          <th> <a href="{% url 'website:single_product' product.product.id %}"> {{ product.product }} </a> </th>
+          <th> {{ product.product.price }} </th>
+          <th> <button>Delete from Cart </button> </th>
+        </tr>
+      {% endfor %}
+        <tr>
+          <th>Total:</th>
+          <th> {{ total }}</th>
+        </tr>
 
-    <ol>
-    </ol>
+      </table>
 
-    <button>Complete Order</button> <!-- This does nothing right now  -->
-    <button>Cancel Order</button> <!-- This does nothing right now  -->
+      <button>Complete Order</button> <!-- This does nothing right now, but will eventually take the user to the complete_order.html where they will select a payment option -->
+      <button>Cancel Order</button> <!-- This does nothing right now, but should eventually remove all products from the cart -->
 
-    <!-- <a href="{% url 'website:list_products' %}">List Products</a> -->
-  </body>
-</html>
+    {% else %}
 
+
+    <h3>You have an empty cart!</h3><br><h2>Keep Shopping!!</h2>
+    
+
+    {% endif %}
+
+{% endblock %}
