@@ -96,13 +96,11 @@ class Order(models.Model):
     args: Extends the models.Model Django class
     returns: (None): N/A
     """   
-    order_date = models.DateTimeField('Order Date')
+    order_date = models.DateTimeField('Order Date', null=True)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
+    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT, null=True)
     products = models.ManyToManyField(Product, through="ProductOrder")
-
-    # def __str__(self):
-    #     return self.order_date
+    active = models.BooleanField(default=True)
 
 class ProductOrder(models.Model):
     """
@@ -113,7 +111,6 @@ class ProductOrder(models.Model):
     """   
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
-
 
 
 

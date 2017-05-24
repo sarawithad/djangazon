@@ -10,9 +10,6 @@
     <h1>My Cart</h1>
 
     <ol>
-    {% for product in products_in_cart %}
-        <a href="{% url 'website:single_product' product.id %}"><li>{{ product.title }} <button>Delete from Cart</button> </li></a> 
-    {% endfor %}
     </ol>
 
     <button>Complete Order</button> <!-- This does nothing right now  -->

@@ -1,14 +1,16 @@
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
+from django.core.exceptions import ObjectDoesNotExist
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm
 from website.models import Product
 from website.models import ProductType
 from website.models import Profile
 from website.models import PaymentType
+from website.models import Order, ProductOrder
 # standard Django view: query, template name, and a render method to render the data from the query into the s
 
 def index(request):
@@ -241,37 +243,28 @@ def user_payment_types(request):
     template_name = 'user_payment_types.html'
     return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
+def add_product_to_order(request, product_id):
+    """
+    Purpose: To add a product (by the product id) to the ProductOrder table.
+    Author: Jordan Nelson & Harper Frankstone
+    Args: product_id - the id of the product to be added to the cart
+    Returns: Redirects user to their shopping cart after a successful add
+    """
+    product_to_add = Product.objects.get(pk=product_id)
 
-# @login_required(login_url='/login')
-# def add_product_to_cart(request, pk):
-#         """
-#     purpose: Allows user to add a product to their cart
+    try:
+        customer = request.user
+        new_order = Order.objects.get(customer=customer, active=1)
+    except ObjectDoesNotExist:
+        customer = request.user
+        new_order = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
 
-#     author: Dara Thomas
+    add_to_ProductOrder = ProductOrder.objects.create(product=product_to_add, order=new_order)
 
-#     args:  
+    return HttpResponseRedirect('/cart')
 
-#     returns: 
-#     """  
-#     product = models.Product.objects.get(id = pk)
-
-
-
-
-# @login_required(login_url='/login')
-# def view_cart(request):
-#     """
-#     purpose: Allows user to view cart and all products they've added to cart
-
-#     author: Dara Thomas
-
-#     args:  request -- The full HTTP request object
-
-#     returns: rendered view of the cart page, with a list of products that are currently in the user's cart
-#     """        
-#     template_name = 'cart.html' 
-#     products_in_cart =  models.Order.objects.get(user = request.user.id)
-#     return render(request, template_name, {"product": product})
+def view_cart(request):
+    return render(request, 'cart.html', {} )
 
 
 
