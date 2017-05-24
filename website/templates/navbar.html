@@ -10,15 +10,6 @@
             <a href="/">Home</a>
         </li>
         <li class="">
-            {% if user.is_authenticated %}
-            <a href="/cart">
-            {%else%}
-            <a href="/login">
-            {%endif%}
-                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-            </a>
-        </li>
-        <li class="">
             <a href="/product_types">Product Catagories</a>
         </li>
         {% if user.is_authenticated %}
@@ -41,6 +32,15 @@
             <a href="/register">Register</a>
         </li>
         {%endif%}
+        <li class="">
+            {% if user.is_authenticated %}
+            <a href="/cart">
+            {%else%}
+            <a href="/login">
+            {%endif%}
+                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+            </a>
+        </li>
     </ul>
   </div>
 </nav>
