@@ -7,7 +7,16 @@ from django.urls import reverse
 class ProductDetailViewTest(TestCase):
 
     def setUp(self):
-        customer = Customer.objects.create(
+
+        self.user = User.objects.create_user(
+            username = "mducharme",
+            email = "meg@meg.com",
+            password = "abcd1234",
+            first_name = "Meg",
+            last_name = "Ducharme"
+        )
+
+        self.customer = Customer.objects.create(
             first_name = "Meg",
             last_name = "Ducharme",
             user_name = "mducharme",
@@ -15,11 +24,11 @@ class ProductDetailViewTest(TestCase):
             password = "abcd1234"
         )
 
-        product_type = ProductType.objects.create(category_name="Test")
+        self.product_type = ProductType.objects.create(product_type_name="Test")
 
         self.product = Product.objects.create(
-            seller = self.customer,
-            product_type = product_type,
+            seller = self.user,
+            product_type = self.product_type,
             title = "emoji stickers",
             description = "yay!",
             price = 1.99,
@@ -34,7 +43,7 @@ class ProductDetailViewTest(TestCase):
 
     def test_product_detail_view_shows_correct_product(self):
         response = self.client.get(reverse('website:single_product', args=([self.product.pk])))
-        self.assertEqual(response.context['product'].name, 'emoji stickers')
+        self.assertEqual(response.context['product'].title, 'emoji stickers')
 
 
     def test_product_detail_view_shows_product_details(self):
