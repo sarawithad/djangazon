@@ -284,18 +284,15 @@ def view_cart(request):
     for product in products_in_cart:
         total += product.product.price
 
-    return render(request, 'cart.html', { 'products_in_cart' : products_in_cart, 'total' : total } )
+    return render(request, 'cart.html', { 'products_in_cart' : products_in_cart, 'total' : total, 'orderid' : order_id } )
 
 @login_required(login_url='/login')
-def complete_order_add_payment():
+def complete_order_add_payment(request, order_id):
     """
     purpose: Allows user to add a payment type to their order and therefore complete and place the order
-
     author: Dara Thomas
-
     args:  
-
     returns: a checkout page where the user sees their order total and can select a payment type for their order
-    """    
-    pass
-
+    """
+    template_name = 'checkout.html'
+    return render(request, template_name, {})

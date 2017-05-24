@@ -102,6 +102,9 @@ class Order(models.Model):
     products = models.ManyToManyField(Product, through="ProductOrder")
     active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return str(self.id)
+
 class ProductOrder(models.Model):
     """
     purpose: Instantiates an instance of a product on an order
@@ -111,6 +114,9 @@ class ProductOrder(models.Model):
     """   
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.id)
 
 
 
