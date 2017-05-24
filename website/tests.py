@@ -5,6 +5,12 @@ from django.urls import reverse
 
 
 class ProductDetailViewTest(TestCase):
+    """
+    Purpose:
+    Author:
+    Args:
+    Returns: 
+    """
 
     def setUp(self):
 
@@ -53,6 +59,67 @@ class ProductDetailViewTest(TestCase):
         self.assertContains(response, "yay!")
         self.assertContains(response, "1.99")
         self.assertContains(response, "500")
+
+class ProductTypeViewTest(TestCase):
+    """
+    Purpose: Verify that when a specific product type is chosen, only products in that type are displayed.
+    Author: Aaron Barfoot
+    Args: (integer) product_type pk
+    Returns: Pass/Fail based on successful/unsuccessful assertion
+    """
+
+    def setUp(self):
+
+        self.user = User.objects.create_user(
+            username = "mscott",
+            email = "mike@dm.com",
+            password = "1111",
+            first_name = "Michael",
+            last_name = "Scott"
+        )
+
+        self.product_type1 = ProductType.objects.create(product_type_name="TestType1")
+        self.product_type2 = ProductType.objects.create(product_type_name="TestType2")
+
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type1,
+            title = "Magic Wand",
+            description = "Getting Testy",
+            price = 5.99,
+            quantity = 12
+        )
+
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type1,
+            title = "Magic Hat",
+            description = "Getting Really Testy",
+            price = 10.99,
+            quantity = 3
+        )
+
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type2,
+            title = "Non-Magic Hat",
+            description = "Shouldn't show",
+            price = 1.99,
+            quantity = 1
+        )
+
+
+        self.client.login(
+            username = "mscott",
+            password = "1111"
+        )
+
+    def test_product_type_products_view(self):
+        response = self.client.get(reverse('website:get_product_types', args=([self.product_type1.pk])))
+        self.assertContains(response, 'TestType1')    
+        self.assertContains(response, 'Magic Wand')    
+        self.assertContains(response, 'Magic Hat')    
+
 
 
 
