@@ -297,5 +297,5 @@ def complete_order_add_payment():
 
     returns: a checkout page where the user sees their order total and can select a payment type for their order
     """    
-    template_name = 'checkout.html'
+    pass
 
