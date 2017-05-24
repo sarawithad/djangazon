@@ -1,0 +1,17 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% load staticfiles %}
+
+<!-- the variables in this template need to be adjusted according to what is passed to this template from the views.py -->
+	<p>
+		Your Order Total is {{ order.total }}
+	</p>
+	{% for pmt_type in payment_types %}
+	<form action="{% url 'website:order_confirmation' %}" method="post">
+		<input type="checkbox">{{ pmt_type.name }} {{ pmt_type.number }}
+	</form>
+	{% endfor %}
+
+{% endblock %}
