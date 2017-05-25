@@ -275,16 +275,17 @@ def user_payment_types(request):
 
 
 
-# @login_required(login_url='/login')
-# def complete_order_add_payment():
-#     """
-#     purpose: Allows user to add a payment type to their order and therefore complete and place the order
+@login_required(login_url='/login')
+def complete_order_add_payment():
+    """
+    purpose: Allows user to add a payment type to their order and therefore complete and place the order
 
-#     author: Dara Thomas
+    author: Dara Thomas
 
-#     args:  
+    args:  
 
-#     returns: a checkout page where the user sees their order total and can select a payment type for their order
-#     """    
-#     template_name = 'checkout.html'
+    returns: a checkout page where the user sees their order total and can select a payment type for their order
+    """    
+    template_name = 'checkout.html'
+    pass
 
