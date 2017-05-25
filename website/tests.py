@@ -180,10 +180,67 @@ class PaymentTypesViewTest(TestCase):
 
 
 
+class ProductsInCartViewTest(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username = "mducharme",
+            email = "meg@meg.com",
+            password = "abcd1234",
+            first_name = "Meg",
+            last_name = "Ducharme"
+        )
+
+        self.customer = Customer.objects.create(
+            first_name = "Meg",
+            last_name = "Ducharme",
+            user_name = "mducharme",
+            email_address = "meg@meg.com",
+            password = "abcd1234"
+        )
+
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type1,
+            title = "Magic Wand",
+            description = "Getting Testy",
+            price = 5.99,
+            quantity = 12
+        )
+
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type1,
+            title = "Magic Hat",
+            description = "Getting Really Testy",
+            price = 10.99,
+            quantity = 3
+        )
+
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
+            title = "emoji stickers",
+            description = "yay!",
+            price = 1.99,
+            quantity = 500
+        )
+
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
+            title = "emoji stickers",
+            description = "yay!",
+            price = 1.99,
+            quantity = 500
+        )
+
+        self.client.login(
+            username = "mducharme",
+            password = "abcd1234"
+        )
 
 
-
-
-
-
-
+    def test_products_show_in_cart(self):
+        response = self.client.get(reverse('website:view_cart'))
+        self.assertQuerysetEqual   (response.context["products_in_cart"], ["<ProductOrder: emoji stickers>", "<ProductOrder: Magic Hat>", "<ProductOrder: Magic Wand>"])
