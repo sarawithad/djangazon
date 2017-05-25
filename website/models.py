@@ -86,8 +86,9 @@ class PaymentType(models.Model):
         User,
         on_delete=models.PROTECT,
     )
-    
 
+    def __str__(self):
+        return self.payment_type_name
 
 class Order(models.Model):
     """

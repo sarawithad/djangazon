@@ -4,8 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
 
-from website.forms import UserForm, ProductForm, PaymentTypeForm
+from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
 from website.models import Product
 from website.models import ProductType
 from website.models import Profile
@@ -276,9 +277,13 @@ def view_cart(request):
         customer = request.user
         order_id = Order.objects.get(customer=customer, active=1).id
     except ObjectDoesNotExist:
-        pass # WE MUST DO SOMETHING HERE
+        customer = request.user
+        new_order = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
 
-    products_in_cart = ProductOrder.objects.all().filter(order=order_id)
+    try:
+        products_in_cart = ProductOrder.objects.all().filter(order=order_id)
+    except UnboundLocalError:
+        return render(request, 'cart.html', { 'products_in_cart' : products_in_cart, 'total' : total, 'orderid' : order_id } )
 
     total = 0
     for product in products_in_cart:
@@ -291,8 +296,37 @@ def complete_order_add_payment(request, order_id):
     """
     purpose: Allows user to add a payment type to their order and therefore complete and place the order
     author: Dara Thomas
-    args:  
+    args: order_id - no clue what to do with this
     returns: a checkout page where the user sees their order total and can select a payment type for their order
     """
-    template_name = 'checkout.html'
-    return render(request, template_name, {})
+    if request.method == 'POST':
+
+        adding_payment_types = PaymentType.objects.filter(customer = request.user)
+        template_name = 'checkout.html'
+        return render(request, template_name, {'adding_payment_types': adding_payment_types, 'order_id' : order_id})
+
+@login_required(login_url='/login')
+def order_confirmation(request):
+
+    if request.method == 'POST':
+
+        payment_type_id = request.POST['payment_type_id']
+        order_id = request.POST['order_id']
+
+        completed_order = Order.objects.get(pk=order_id)
+        completed_order.payment_type = PaymentType.objects.get(pk=payment_type_id)
+        completed_order.active = False
+        completed_order.order_date = datetime.now()
+        completed_order.save()        
+
+        return render(request, 'order_confirmation.html' , {})
+
+
+
+
+
+
+
+
+
+

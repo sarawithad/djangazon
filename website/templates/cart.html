@@ -5,7 +5,7 @@
 
 
       <h1>My Cart</h1>
-    {% if products_in_cart is not Null %}
+    {% if total is not 0 %}
       <table> 
         <tr>
           <th>Product Name</th>
@@ -36,10 +36,8 @@
 
     {% else %}
 
-
     <h3>You have an empty cart!</h3><br><h2>Keep Shopping!!</h2>
     
-
     {% endif %}
 
 {% endblock %}
