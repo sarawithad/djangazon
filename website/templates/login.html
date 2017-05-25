@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Bangazon</title>
-    </head>
+{% extends 'main.html' %}
 
-    <body>
-        <h1>Login to Bangazon</h1>
+{% block content %}
 
-        <form id="login_form" method="post" action="{% url 'website:login' %}">
-            {% csrf_token %}
-            Username: <input type="text" name="username" value="" size="50" />
-            <br />
-            Password: <input type="password" name="password" value="" size="50" />
-            <br />
+{% load staticfiles %}
 
-            <input type="submit" value="submit" />
-        </form>
 
-    </body>
-</html>
+    <form id="login_form" method="post" action="{% url 'website:login' %}">
+        {% csrf_token %}
+        Username: <input type="text" name="username" value="" size="50" />
+        <br />
+        Password: <input type="password" name="password" value="" size="50" />
+        <br />
+
+        <input type="submit" value="submit" />
+    </form>
+
+{% endblock %}

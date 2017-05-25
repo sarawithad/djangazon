@@ -86,14 +86,12 @@ class PaymentType(models.Model):
         User,
         on_delete=models.PROTECT,
     )
-    
-    def __str__(self):
-        return self.payment_type_name
 
     class Meta:
-
         ordering = ('payment_type_name',)
 
+    def __str__(self):
+        return self.payment_type_name
 
 class Order(models.Model):
     """
@@ -102,13 +100,14 @@ class Order(models.Model):
     args: Extends the models.Model Django class
     returns: (None): N/A
     """   
-    order_date = models.DateTimeField('Order Date')
+    order_date = models.DateTimeField('Order Date', null=True)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
-    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT)
+    payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT, null=True)
     products = models.ManyToManyField(Product, through="ProductOrder")
+    active = models.BooleanField(default=True)
 
-    # def __str__(self):
-    #     return self.order_date
+    def __str__(self):
+        return str(self.id)
 
 class ProductOrder(models.Model):
     """
@@ -119,6 +118,9 @@ class ProductOrder(models.Model):
     """   
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.id)
 
 
 

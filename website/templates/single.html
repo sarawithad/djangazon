@@ -12,6 +12,12 @@
       <li>Quantity Available: {{ product.quantity }}</li>
       <li>Price/Unit: {{ product.price }}</li>      
     </ol>
-    <button>Add to Order</button> <!-- This does nothing right now  -->
+
+    {% if user.is_authenticated %}
+    <form action="/add_to_cart/{{product.id}}/" method="POST">
+    {% csrf_token %}
+        <button>Add to Cart</button>
+    </form>
+    {% endif %}
 
 {% endblock %}

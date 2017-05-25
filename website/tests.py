@@ -115,12 +115,8 @@ class ProductTypeViewTest(TestCase):
         )
 
     def test_product_type_products_view(self):
-        response = self.client.get(reverse('website:get_product_types', args=([self.product_type1.pk])))
-        self.assertContains(response, 'TestType1')    
-        self.assertContains(response, 'Magic Wand')    
-        self.assertContains(response, 'Magic Hat')    
-
-
+        response = self.client.get(reverse('website:get_product_types', args=([self.product_type1.pk])))  
+        self.assertQuerysetEqual(response.context['products_of_type'], ["<Product: Magic Hat>", "<Product: Magic Wand>"],ordered=False)
 
 class PaymentTypesViewTest(TestCase):
     """

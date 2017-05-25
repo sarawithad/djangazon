@@ -1,14 +1,18 @@
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
+from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
 
-from website.forms import UserForm, ProductForm, PaymentTypeForm
+from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
 from website.models import Product
 from website.models import ProductType
 from website.models import Profile
 from website.models import PaymentType
+from website.models import Order, ProductOrder
+# standard Django view: query, template name, and a render method to render the data from the query into the s
 
 
 def index(request):
@@ -241,50 +245,88 @@ def user_payment_types(request):
     template_name = 'user_payment_types.html'
     return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
+@login_required(login_url='/login')
+def add_product_to_order(request, product_id):
+    """
+    Purpose: To add a product (by the product id) to the ProductOrder table.
+    Author: Jordan Nelson & Harper Frankstone
+    Args: product_id - the id of the product to be added to the cart
+    Returns: Redirects user to their shopping cart after a successful add
+    """
+    product_to_add = Product.objects.get(pk=product_id)
 
-# @login_required(login_url='/login')
-# def add_product_to_cart(request, pk):
-#         """
-#     purpose: Allows user to add a product to their cart
+    try:
+        customer = request.user
+        new_order = Order.objects.get(customer=customer, active=1)
+    except ObjectDoesNotExist:
+        customer = request.user
+        new_order = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
 
-#     author: Dara Thomas
+    add_to_ProductOrder = ProductOrder.objects.create(product=product_to_add, order=new_order)
 
-#     args:  
+    return HttpResponseRedirect('/cart')
 
-#     returns: 
-#     """  
-#     product = models.Product.objects.get(id = pk)
+@login_required(login_url='/login')
+def view_cart(request):
+    """
+    Purpose: To view the cart of a customer's products
+    Author: Jordan Nelson & Harper Frankstone
+    Args: None
+    Returns: A list of the products added to a shopping cart and their total
+    """
+    total = 0
 
+    try:
+        customer = request.user
+        order_id = Order.objects.get(customer=customer, active=1).id
+    except ObjectDoesNotExist:
+        customer = request.user
+        order_id = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
 
+    try:
+        products_in_cart = ProductOrder.objects.all().filter(order=order_id)
+    except:
+        return render(request, 'cart.html', { 'total' : total, 'orderid' : order_id } )
 
+    for product in products_in_cart:
+        total += product.product.price
 
-# @login_required(login_url='/login')
-# def view_cart(request):
-#     """
-#     purpose: Allows user to view cart and all products they've added to cart
+    return render(request, 'cart.html', { 'products_in_cart' : products_in_cart, 'total' : total, 'orderid' : order_id } )
 
-#     author: Dara Thomas
+@login_required(login_url='/login')
+def complete_order_add_payment(request, order_id):
+    """
+    purpose: Allows user to add a payment type to their order and therefore complete and place the order
+    author: Dara Thomas
+    args: order_id - no clue what to do with this
+    returns: a checkout page where the user sees their order total and can select a payment type for their order
+    """
+    if request.method == 'POST':
 
-#     args:  request -- The full HTTP request object
+        adding_payment_types = PaymentType.objects.filter(customer = request.user)
 
-#     returns: rendered view of the cart page, with a list of products that are currently in the user's cart
-#     """        
-#     template_name = 'cart.html' 
-#     products_in_cart =  models.Order.objects.get(user = request.user.id)
-#     return render(request, template_name, {"product": product})
+        template_name = 'checkout.html'
+        return render(request, template_name, {'adding_payment_types': adding_payment_types, 'order_id' : order_id})
 
+@login_required(login_url='/login')
+def order_confirmation(request):
+    """
+    purpose: To mark an order as finished by setting the active field as 0 and writing the 
+    payment type used for the order to the database.
+    author: Jordan Nelson
+    args: None
+    returns: renders the order confirmation table after a successful order completion
+    """
+    if request.method == 'POST':
 
+        payment_type_id = request.POST['payment_type_id']
+        order_id = request.POST['order_id']
 
-# @login_required(login_url='/login')
-# def complete_order_add_payment():
-#     """
-#     purpose: Allows user to add a payment type to their order and therefore complete and place the order
+        completed_order = Order.objects.get(pk=order_id)
+        completed_order.payment_type = PaymentType.objects.get(pk=payment_type_id)
+        completed_order.active = False
+        completed_order.order_date = datetime.now()
+        completed_order.save()        
 
-#     author: Dara Thomas
-
-#     args:  
-
-#     returns: a checkout page where the user sees their order total and can select a payment type for their order
-#     """    
-#     template_name = 'checkout.html'
+        return render(request, 'order_confirmation.html' , {})
 
