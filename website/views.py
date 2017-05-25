@@ -273,19 +273,20 @@ def view_cart(request):
     Args: None
     Returns: A list of the products added to a shopping cart and their total
     """
+    total = 0
+
     try:
         customer = request.user
         order_id = Order.objects.get(customer=customer, active=1).id
     except ObjectDoesNotExist:
         customer = request.user
-        new_order = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
+        order_id = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
 
     try:
         products_in_cart = ProductOrder.objects.all().filter(order=order_id)
-    except UnboundLocalError:
-        return render(request, 'cart.html', { 'products_in_cart' : products_in_cart, 'total' : total, 'orderid' : order_id } )
+    except:
+        return render(request, 'cart.html', { 'total' : total, 'orderid' : order_id } )
 
-    total = 0
     for product in products_in_cart:
         total += product.product.price
 
