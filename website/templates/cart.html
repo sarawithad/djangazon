@@ -1,24 +1,41 @@
+{% extends 'main.html' %}
 {% load staticfiles %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Bangazon</title>
-  </head>
-  <body>
+{% block content %}
 
-    <h1>My Cart</h1>
+      <h1>My Cart</h1>
+    {% if total is not 0 %}
+      <table> 
+        <tr>
+          <th>Product Name</th>
+          <th>Product Price</th>
+        </tr>
+      {% for product in products_in_cart %}
+        <tr>
+          <th> <a href="{% url 'website:single_product' product.product.id %}"> {{ product.product }} </a> </th>
+          <th> {{ product.product.price }} </th>
+          <th> <button>Delete from Cart </button> </th>
+        </tr>
+      {% endfor %}
+        <tr>
+          <th>Total:</th>
+          <th> {{ total }}</th>
+        </tr>
 
-    <ol>
-    {% for product in products_in_cart %}
-        <a href="{% url 'website:single_product' product.id %}"><li>{{ product.title }} <button>Delete from Cart</button> </li></a> 
-    {% endfor %}
-    </ol>
+      </table>
 
-    <button>Complete Order</button> <!-- This does nothing right now  -->
-    <button>Cancel Order</button> <!-- This does nothing right now  -->
+      {% if user.is_authenticated %}
+      <form action="/checkout/{{ orderid }}/" method="POST">
+      {% csrf_token %}
+          <button>Complete Order</button>
+      </form>
+      {% endif %}
 
-    <!-- <a href="{% url 'website:list_products' %}">List Products</a> -->
-  </body>
-</html>
+      <button>Cancel Order</button> <!-- This does nothing right now, but should eventually remove all products from the cart -->
 
+    {% else %}
+
+    <h3>You have an empty cart!</h3><br><h2>Keep Shopping!!</h2>
+    
+    {% endif %}
+
+{% endblock %}
