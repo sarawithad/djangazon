@@ -270,7 +270,7 @@ def view_cart(request):
     """
     Purpose: To view the cart of a customer's products
     Author: Jordan Nelson & Harper Frankstone
-    Args: None
+    Args: request --the full HTTP request object
     Returns: A list of the products added to a shopping cart and their total
     """
     total = 0
@@ -296,16 +296,16 @@ def view_cart(request):
 def complete_order_add_payment(request, order_id):
     """
     purpose: Allows user to add a payment type to their order and therefore complete and place the order
-    author: Dara Thomas
-    args: order_id - no clue what to do with this
+    author: Harper Frankstone/Jordan Nelson
+    args: request --the full HTTP request object, order_id - passed to this method from the view_cart method 
     returns: a checkout page where the user sees their order total and can select a payment type for their order
     """
     if request.method == 'POST':
-
+        total = request.POST['total']
         adding_payment_types = PaymentType.objects.filter(customer = request.user)
 
         template_name = 'checkout.html'
-        return render(request, template_name, {'adding_payment_types': adding_payment_types, 'order_id' : order_id})
+        return render(request, template_name, { 'adding_payment_types': adding_payment_types, 'order_id' : order_id, 'total': total })
 
 @login_required(login_url='/login')
 def order_confirmation(request):
@@ -313,7 +313,7 @@ def order_confirmation(request):
     purpose: To mark an order as finished by setting the active field as 0 and writing the 
     payment type used for the order to the database.
     author: Jordan Nelson
-    args: None
+    args: request --the full HTTP request object
     returns: renders the order confirmation table after a successful order completion
     """
     if request.method == 'POST':

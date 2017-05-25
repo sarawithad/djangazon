@@ -8,6 +8,8 @@
 	{% for pmt_type in adding_payment_types %}
 		<form action="{% url 'website:order_confirmation' %}" method="POST">
 		{% csrf_token %}
+
+			<p><strong>Order Total:</strong> ${{ total }}</p>
 			<input type="hidden" name="payment_type_id" value="{{ pmt_type.id }}">
 			<input type="hidden" name="order_id" value="{{ order_id }}">
 			Payment Type: {{ pmt_type }} <br />

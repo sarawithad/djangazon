@@ -12,19 +12,20 @@
       {% for product in products_in_cart %}
         <tr>
           <th> <a href="{% url 'website:single_product' product.product.id %}"> {{ product.product }} </a> </th>
-          <th> {{ product.product.price }} </th>
+          <th> ${{ product.product.price }} </th>
           <th> <button>Delete from Cart </button> </th>
         </tr>
       {% endfor %}
         <tr>
           <th>Total:</th>
-          <th> {{ total }}</th>
+          <th> ${{ total }}</th>
         </tr>
 
       </table>
 
       {% if user.is_authenticated %}
       <form action="/checkout/{{ orderid }}/" method="POST">
+      <input type="hidden" name="total" value="{{ total }}">
       {% csrf_token %}
           <button>Complete Order</button>
       </form>
