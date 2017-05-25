@@ -15,6 +15,9 @@
 
     		<button>Select</button>
     	</form>
+    {% empty %}
+    <h3> You have not added a payment type. <br />
+    <a href="{% url 'website:add_payment_type' %}">Please Add a Payment Type </a> </h3>
     {% endfor %}
 {% endif %}
 

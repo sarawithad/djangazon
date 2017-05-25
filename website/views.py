@@ -303,6 +303,7 @@ def complete_order_add_payment(request, order_id):
     if request.method == 'POST':
 
         adding_payment_types = PaymentType.objects.filter(customer = request.user)
+
         template_name = 'checkout.html'
         return render(request, template_name, {'adding_payment_types': adding_payment_types, 'order_id' : order_id})
 
