@@ -37,7 +37,7 @@ class ProductType(models.Model):
 class Product(models.Model):
     """
     purpose: Instantiates a product
-    author: 
+    author: boilerplate code
     args: Extends the models.Model Django class
     returns: (None): N/A
     """   

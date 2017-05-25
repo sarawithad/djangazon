@@ -8,8 +8,8 @@ class ProductDetailViewTest(TestCase):
     """
     Purpose: Verify that when a product is created that the Product Detail view has the correct product with the product's title, description, price and quantity in the response context 
     Author: Dara Thomas
-    Args:
-    Returns: 
+    Args: (integer) product pk
+    Returns: Pass/Fail based on successful/unsuccessful assertion
     """
 
     def setUp(self):
@@ -122,14 +122,12 @@ class ProductTypeViewTest(TestCase):
 
 
 
-
-
 class PaymentTypesViewTest(TestCase):
     """
     Purpose: Verifies that the Payment Types view for a customer has all of the payment types in the request context
     Author: Dara Thomas
-    Args:
-    Returns: 
+    Args: HTTP request
+    Returns: Pass/Fail based on successful/unsuccessful assertion
     """
 
     def setUp(self):
@@ -181,6 +179,12 @@ class PaymentTypesViewTest(TestCase):
 
 
 class ProductsInCartViewTest(TestCase):
+    """
+    Purpose: Verify that when products are added to an order that the Order Summary view has those products in the response context
+    Author: Dara Thomas
+    Args: (integer) product pk
+    Returns: Pass/Fail based on successful/unsuccessful assertion
+    """
 
     def setUp(self):
         self.user = User.objects.create_user(

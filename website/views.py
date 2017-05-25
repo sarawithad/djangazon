@@ -9,7 +9,7 @@ from website.models import Product
 from website.models import ProductType
 from website.models import Profile
 from website.models import PaymentType
-# standard Django view: query, template name, and a render method to render the data from the query into the s
+
 
 def index(request):
     """
