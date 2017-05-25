@@ -87,6 +87,9 @@ class PaymentType(models.Model):
         on_delete=models.PROTECT,
     )
 
+    class Meta:
+        ordering = ('payment_type_name',)
+
     def __str__(self):
         return self.payment_type_name
 

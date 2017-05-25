@@ -308,7 +308,13 @@ def complete_order_add_payment(request, order_id):
 
 @login_required(login_url='/login')
 def order_confirmation(request):
-
+    """
+    purpose: To mark an order as finished by setting the active field as 0 and writing the 
+    payment type used for the order to the database.
+    author: Jordan Nelson
+    args: None
+    returns: renders the order confirmation table after a successful order completion
+    """
     if request.method == 'POST':
 
         payment_type_id = request.POST['payment_type_id']
@@ -321,13 +327,4 @@ def order_confirmation(request):
         completed_order.save()        
 
         return render(request, 'order_confirmation.html' , {})
-
-
-
-
-
-
-
-
-
 

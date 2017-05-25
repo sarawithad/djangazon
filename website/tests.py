@@ -6,8 +6,8 @@ from django.urls import reverse
 
 class ProductDetailViewTest(TestCase):
     """
-    Purpose:
-    Author:
+    Purpose: Verify that when a product is created that the Product Detail view has the correct product with the product's title, description, price and quantity in the response context 
+    Author: Dara Thomas
     Args:
     Returns: 
     """
@@ -58,6 +58,7 @@ class ProductDetailViewTest(TestCase):
         self.assertContains(response, "yay!")
         self.assertContains(response, "1.99")
         self.assertContains(response, "500")
+
 
 class ProductTypeViewTest(TestCase):
     """
@@ -114,10 +115,69 @@ class ProductTypeViewTest(TestCase):
         )
 
     def test_product_type_products_view(self):
-        response = self.client.get(reverse('website:get_product_types', args=([self.product_type1.pk])))
-        self.assertContains(response, 'TestType1')    
-        self.assertContains(response, 'Magic Wand')    
-        self.assertContains(response, 'Magic Hat')    
+        response = self.client.get(reverse('website:get_product_types', args=([self.product_type1.pk])))  
+        self.assertQuerysetEqual(response.context['products_of_type'], ["<Product: Magic Hat>", "<Product: Magic Wand>"],ordered=False)
+
+
+
+class PaymentTypesViewTest(TestCase):
+    """
+    Purpose: Verifies that the Payment Types view for a customer has all of the payment types in the request context
+    Author: Dara Thomas
+    Args:
+    Returns: 
+    """
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username = "mducharme",
+            email = "meg@meg.com",
+            password = "abcd1234",
+            first_name = "Meg",
+            last_name = "Ducharme"
+        )
+
+
+        self.customer = Customer.objects.create(
+            first_name = "Meg",
+            last_name = "Ducharme",
+            user_name = "mducharme",
+            email_address = "meg@meg.com",
+            password = "abcd1234"
+        )
+
+        self.payment_type = PaymentType.objects.create(
+            payment_type_name = "Visa",
+            account_number = 1234123412341234,
+            customer = self.user
+        )
+
+        self.payment_type = PaymentType.objects.create(
+            payment_type_name = "MasterCard",
+            account_number = 5678567856785678,
+            customer = self.user
+        )
+
+        self.payment_type = PaymentType.objects.create(
+            payment_type_name = "AMEX",
+            account_number = 1010101010101010,
+            customer = self.user
+        )
+
+        self.client.login(
+            username = "mducharme",
+            password = "abcd1234"
+        )
+
+
+    def test_payment_type_view_shows_payment_types(self):
+        response = self.client.get(reverse('website:user_payment_types'))
+        self.assertQuerysetEqual   (response.context["user_payment_types"], ["<PaymentType: AMEX>", "<PaymentType: MasterCard>", "<PaymentType: Visa>"])
+
+
+
+
+
 
 
 
