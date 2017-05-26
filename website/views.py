@@ -254,7 +254,6 @@ def delete_payment_type(request):
     Args: payment_type_id
     Returns: 
     """
-    print("hi jordan")
     if request.method == 'POST':
         pmt_type_to_delete = request.POST['payment_type_id']
         pmt_type = PaymentType.objects.get(pk=pmt_type_to_delete).delete()
