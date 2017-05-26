@@ -337,22 +337,17 @@ def delete_product_from_cart(request):
     Returns: an updated shopping cart without the selected product
     """
 
-    # First I need to pass the product_id from the specific product into this method
-    # then I need to query the Order table to delete the product, using request.post[''], or this 
-
     if request.method == 'POST':
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
-        print('order id: ',order_for_deletion)
-        print('product id: ', deleted_product)
-        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete() 
-        
 
-        cart_context = view_cart(request)
+        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()         
 
+        # need to redirect the user to an updated view of the cart 
+        # cart_context = view_cart(request)
     
 
-        return render(request, 'cart.html', {'cart_context': cart_context})
+        return HttpResponseRedirect('/cart')
 
 
 
