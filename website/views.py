@@ -202,7 +202,7 @@ def profile(request):
     Purpose: to render the profile page in the browser
     Author: Harper Frankstone
     Args: request -- the full HTTP request object
-    Returns: 
+    Returns: renders the profile template in the browser
     """
     template_name = 'profile.html'
     return render(request, template_name, {})
@@ -249,7 +249,7 @@ def add_product_to_order(request, product_id):
     """
     Purpose: To add a product (by the product id) to the ProductOrder table.
     Author: Jordan Nelson & Harper Frankstone
-    Args: product_id - the id of the product to be added to the cart
+    Args: product_id - the id of the product to be added to the cart, request --the full HTTP request object 
     Returns: Redirects user to their shopping cart after a successful add
     """
     product_to_add = Product.objects.get(pk=product_id)
@@ -328,4 +328,40 @@ def order_confirmation(request):
         completed_order.save()        
 
         return render(request, 'order_confirmation.html' , {})
+
+def delete_product_from_cart(request):
+    """
+    Purpose: to remove a specific product from the shopping cart on the browser, as well as in the Order table
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object, product_id - the id of the selected product thats going to be deleted
+    Returns: an updated shopping cart without the selected product
+    """
+
+    # First I need to pass the product_id from the specific product into this method
+    # then I need to query the Order table to delete the product, using request.post[''], or this 
+
+    if request.method == 'POST':
+        deleted_product = request.POST['product_id']
+        order_for_deletion = request.POST['order_id']
+        print('order id: ',order_for_deletion)
+        print('product id: ', deleted_product)
+        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete() 
+        
+
+        cart_context = view_cart(request)
+
+    
+
+        return render(request, 'cart.html', {'cart_context': cart_context})
+
+
+
+
+
+
+
+
+
+
+
 
