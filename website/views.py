@@ -328,7 +328,8 @@ def order_confirmation(request):
         completed_order.save()        
 
         return render(request, 'order_confirmation.html' , {})
-
+        
+@login_required(login_url='/login')
 def delete_product_from_cart(request):
     """
     Purpose: to remove a specific product from the shopping cart on the browser, as well as in the Order table
@@ -343,9 +344,6 @@ def delete_product_from_cart(request):
 
         ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()         
 
-        # need to redirect the user to an updated view of the cart 
-        # cart_context = view_cart(request)
-    
 
         return HttpResponseRedirect('/cart')
 
