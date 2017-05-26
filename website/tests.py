@@ -181,8 +181,9 @@ class ProductsInCartViewTest(TestCase):
     Args: (integer) product pk
     Returns: Pass/Fail based on successful/unsuccessful assertion
     """
-
-    def setUp(self):
+        
+    def test_products_show_in_cart(self):
+        
         self.user = User.objects.create_user(
             username = "mducharme",
             email = "meg@meg.com",
@@ -199,40 +200,57 @@ class ProductsInCartViewTest(TestCase):
             password = "abcd1234"
         )
 
-        self.product = Product.objects.create(
+        self.product_type = ProductType.objects.create(product_type_name="TestProdType")
+
+        
+        self.product_1 = Product.objects.create(
             seller = self.user,
-            product_type = self.product_type1,
+            product_type = self.product_type,
+            title = "emoji stickers",
+            description = "yay!",
+            price = 1.99,
+            quantity = 500
+        )
+
+
+        self.product_2 = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
+            title = "Keys",
+            description = "They're keys",
+            price = 3.00,
+            quantity = 100
+        )
+
+
+        self.product_3 = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
             title = "Magic Wand",
-            description = "Getting Testy",
+            description = "oh oh it's magic",
             price = 5.99,
             quantity = 12
         )
 
-        self.product = Product.objects.create(
-            seller = self.user,
-            product_type = self.product_type1,
-            title = "Magic Hat",
-            description = "Getting Really Testy",
-            price = 10.99,
-            quantity = 3
+
+        self.order = Order.objects.create(
+            customer = self.user
         )
 
-        self.product = Product.objects.create(
-            seller = self.user,
-            product_type = self.product_type,
-            title = "emoji stickers",
-            description = "yay!",
-            price = 1.99,
-            quantity = 500
+        self.product_order_1 = ProductOrder.objects.create(
+            product = self.product_1,
+            order = self.order
         )
 
-        self.product = Product.objects.create(
-            seller = self.user,
-            product_type = self.product_type,
-            title = "emoji stickers",
-            description = "yay!",
-            price = 1.99,
-            quantity = 500
+        self.product_order_2 = ProductOrder.objects.create(
+            product = self.product_2,
+            order = self.order
+        )
+
+
+        self.product_order_3 = ProductOrder.objects.create(
+            product = self.product_3,
+            order = self.order
         )
 
         self.client.login(
@@ -241,6 +259,13 @@ class ProductsInCartViewTest(TestCase):
         )
 
 
-    def test_products_show_in_cart(self):
-        response = self.client.get(reverse('website:view_cart'))
-        self.assertQuerysetEqual   (response.context["products_in_cart"], ["<ProductOrder: emoji stickers>", "<ProductOrder: Magic Hat>", "<ProductOrder: Magic Wand>"])
+        response = self.client.get(reverse('website:cart'))
+
+        print(response.context["products_in_cart"])
+        self.assertQuerysetEqual   (response.context["products_in_cart"], ["<ProductOrder: emoji stickers>", "<ProductOrder: Keys>", "<ProductOrder: Magic Wand>"])
+
+
+
+
+
+

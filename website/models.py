@@ -19,7 +19,7 @@ class Profile(models.Model):
         return "This user's name is {}".format(self.user.first_name)
 
 
-class ProductType(models.Model):
+class ProductType(models.Model):                      
     """
     purpose: Instantiates a product type
     author: Aaron Barfoot
@@ -109,6 +109,12 @@ class Order(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        ordering = ('order_date',)
+
+    def __str__(self):
+        return self.order_date
+
 class ProductOrder(models.Model):
     """
     purpose: Instantiates an instance of a product on an order
@@ -123,6 +129,8 @@ class ProductOrder(models.Model):
         return str(self.id)
 
 
+    class Meta:
+        ordering = ('product',)
 
-
-
+    def __str__(self):
+        return self.product.title
