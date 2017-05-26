@@ -232,6 +232,7 @@ def add_payment_type(request):
         template_name = 'payment_type_success.html'
         return render(request, template_name, {})
 
+
 @login_required(login_url='/login')
 def user_payment_types(request):
     """
@@ -243,6 +244,23 @@ def user_payment_types(request):
     user_payment_types = PaymentType.objects.filter(customer = request.user)
     template_name = 'user_payment_types.html'
     return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
+
+
+# @login_required(login_url='/login')
+def delete_payment_type(request):
+    """
+    Purpose: Delete a payment type from a customer's account
+    Author: Aaron Barfoot
+    Args: payment_type_id
+    Returns: 
+    """
+    print("hi jordan")
+    if request.method == 'POST':
+        pmt_type_to_delete = request.POST['payment_type_id']
+        pmt_type = PaymentType.objects.get(pk=pmt_type_to_delete).delete()
+
+        return render(request, 'delete_payment_type.html', {'delete_payment_type': delete_payment_type})
+
 
 @login_required(login_url='/login')
 def add_product_to_order(request, product_id):
