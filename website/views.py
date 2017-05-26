@@ -271,6 +271,9 @@ def add_product_to_order(request, product_id):
     """
     product_to_add = Product.objects.get(pk=product_id)
 
+    if product_to_add.quantity <= 0:
+        print('Need to Prevent This in Database')
+
     try:
         customer = request.user
         new_order = Order.objects.get(customer=customer, active=1)
@@ -338,13 +341,19 @@ def order_confirmation(request):
         payment_type_id = request.POST['payment_type_id']
         order_id = request.POST['order_id']
 
+        products_on_order = ProductOrder.objects.values_list('product', flat=True).filter(order=order_id)
+        for each_product in products_on_order:
+            prodid = Product.objects.get(pk=each_product)
+            prodid.quantity = prodid.quantity - 1
+            prodid.save()
+
         completed_order = Order.objects.get(pk=order_id)
         completed_order.payment_type = PaymentType.objects.get(pk=payment_type_id)
         completed_order.active = False
         completed_order.order_date = datetime.now()
         completed_order.save()        
 
-        return render(request, 'order_confirmation.html' , {})
+        return render(request, 'order_confirmation.html' , {'products_on_order' : products_on_order})
         
 @login_required(login_url='/login')
 def delete_product_from_cart(request):
@@ -361,17 +370,4 @@ def delete_product_from_cart(request):
 
         ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()         
 
-
         return HttpResponseRedirect('/cart')
-
-
-
-
-
-
-
-
-
-
-
-

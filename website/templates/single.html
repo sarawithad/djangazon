@@ -13,11 +13,14 @@
       <li>Price/Unit: {{ product.price }}</li>      
     </ul>
 
-    {% if user.is_authenticated %}
-    <form action="/add_to_cart/{{product.id}}/" method="POST">
-    {% csrf_token %}
-        <button>Add to Cart</button>
-    </form>
-    {% endif %}
+  {% if user.is_authenticated %}
+      {% if product.quantity > 0 %}
+        <form action="/add_to_cart/{{product.id}}/" method="POST">
+          {% csrf_token %}
+            <button>Add to Cart</button>
+        </form>
+      {% endif %}
+
+ {% endif %}
 
 {% endblock %}
