@@ -3,7 +3,7 @@
     <ul class="nav navbar-nav">
         <li class="">
             <a href="/">
-                <button type="button" class="btn btn-default btn-sm">
+                <button type="button" class="btn btn-primary btn-sm">
                     <span class="glyphicon glyphicon-home" aria-hidden="true"></span> Home
                 </button>
             </a>
@@ -17,7 +17,7 @@
         </li>
         <li class="">
             <a href="/product_types">
-            <button type="button" class="btn btn-default btn-sm">
+            <button type="button" class="btn btn-primary btn-sm">
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Product Categories
             </button>
             </a>
@@ -25,31 +25,35 @@
         {% if user.is_authenticated %}
         <li class="">
             <a href="/sell">
-            <button type="button" class="btn btn-default btn-sm">
+            <button type="button" class="btn btn-primary btn-sm">
                     <span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Sell Products
                 </button>
             </a>
         </li>
         <li class="">
             <a href="/profile">
-                <button type="button" class="btn btn-default btn-sm">
+                <button type="button" class="btn btn-primary btn-sm">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span> My Profile
                 </button>
             </a>
         </li>
         <li class="">
             <a href="{% url 'website:logout' %}">
-                <button type="button" class="btn btn-default btn-sm">
+                <button type="button" class="btn btn-danger btn-sm">
                     <span class="glyphicon glyphicon-log-out"></span> Log out
                 </button>
             </a>
         </li>
         {%else%}
         <li class="">
-            <a href="/login">Login</a>
+            <a href="/login">
+                <button type="button" class="btn btn-success btn-sm">Login</button>
+            </a>
         </li>
         <li class="">
-            <a href="/register">Register</a>
+            <a href="/register">
+                <button type="button" class="btn btn-success btn-sm">Register</button>
+            </a>
         </li>
         {%endif%}
         <li class="">
@@ -58,7 +62,7 @@
             {%else%}
             <a href="/login">
             {%endif%}
-                <button type="button" class="btn btn-default btn-sm">
+                <button type="button" class="btn btn-primary btn-sm">
                     <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Cart
                 </button>
             </a>
