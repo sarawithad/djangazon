@@ -2,17 +2,18 @@
 
 {% block content %}
 
+	<hr>
 	{% if user.is_authenticated %}
-		<h4>Account Information</h4>
+		<h4>Account Information:</h4>
 		<p><strong>Username:</strong></p>{{user.username}}
 		<p><strong>First Name:</strong></p>{{user.first_name}}
 		<p><strong>Last Name:</strong></p>{{user.last_name}}
 		<p><strong>Email:</strong></p>{{user.email}}
-		<p><strong>Password:</strong></p>{{user.password}}
-	{% endif %}
+<!-- 		<p><strong>Password:</strong></p>{{user.password}}
+ -->	{% endif %}
 	<br>
 	<hr>
-	<button><a href="add_payment_type">Add a Payment Type</a></button>
-	<button><a href="user_payment_types">View Your Payment Types</a></button>
+	<a class="btn btn-default" href="add_payment_type">Add a Payment Type</a>
+	<a class="btn btn-default" href="user_payment_types">View Your Payment Types</a>
 
 {% endblock %}
