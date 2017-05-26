@@ -246,7 +246,7 @@ def user_payment_types(request):
     return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
 
-# @login_required(login_url='/login')
+@login_required(login_url='/login')
 def delete_payment_type(request):
     """
     Purpose: Delete a payment type from a customer's account
