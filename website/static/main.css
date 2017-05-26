@@ -10,3 +10,8 @@ hr {
 .payment-type-line {
 	display: inline;
 }
+
+.cart-line-item {
+	padding: 20px;
+	border-bottom: 2px dotted black;
+}
