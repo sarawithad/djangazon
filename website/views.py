@@ -366,7 +366,14 @@ def delete_product_from_cart(request):
 
 
 
-
+def cancel_order(request):
+    """
+    Purpose: to cancel an order and remove it from the database
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object
+    Returns: an updated Order table, without the specific order that has been cancelled
+    """
+    
 
 
 

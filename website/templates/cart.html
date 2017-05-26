@@ -19,9 +19,9 @@
             {% csrf_token %}
               <input type="hidden" name="product_id" value="{{ product.product_id }}">
               <input type="hidden" name="order_id" value="{{ product.order_id }}">
-
               <button>Delete from Cart </button>
             </form> 
+
             {% endif %}
           </th>
         </tr>
@@ -41,7 +41,14 @@
       </form>
       {% endif %}
 
-      <button>Cancel Order</button> <!-- This does nothing right now, but should eventually remove all products from the cart -->
+      {% if user.is_authenticated %}
+      <form action="{% url 'website:cancel_order' %}" method="POST">
+      {% csrf_token %}
+        <button>Cancel Order</button> 
+      </form>
+      {% endif %}
+
+
 
     {% else %}
 
