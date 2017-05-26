@@ -359,7 +359,7 @@ def delete_product_from_cart(request):
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
 
-        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()         
+        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
 
 
         return HttpResponseRedirect('/cart')
@@ -373,8 +373,14 @@ def cancel_order(request):
     Args: request -- the full HTTP request object
     Returns: an updated Order table, without the specific order that has been cancelled
     """
-    
 
+    if request.method == 'POST':
+        deleted_order = request.POST.get('order_id')
+
+        Order.objects.get(id=deleted_order).delete()
+
+        return HttpResponseRedirect('/cart')
+        # return HttpResponseRedirect('/cancel_order')
 
 
 
