@@ -4,13 +4,14 @@
 
 {% load staticfiles %}
 
-    <h3>Sell Product</h3>
+	<hr>
+    <h3>Add a product to sell:</h3><br>
 
 
     <form action="{% url 'website:sell' %}" method="post">
       {% csrf_token %}
       {{ product_form.as_p }}
-      <input type="submit" value="Sell It" />
+      <input type="submit" class="btn btn-success btn-lg" value="Sell It" />
     </form>
 
 {% endblock %}

@@ -1,13 +1,14 @@
 {% extends 'main.html' %}
 {% block content %}
 
-<h1>Product Types</h1>
+<hr>
+<h1>Product Types</h1><br>
 
 <ol>
 	{% for producttype in product_types %}
 		<li> 
-		<a href="{{ producttype.get_absolute_url }}"> {{ producttype.product_type_name }} </a>
-		({{ producttype.num_products }}) </li>
+		<a href="{{ producttype.get_absolute_url }}"> <h4>{{ producttype.product_type_name }} </a>
+		({{ producttype.num_products }})</h4> </li>
 
 		{% for product in producttype.products %}
 			<a href="{{ product.get_absolute_url }}"> {{ product.title }} </a>

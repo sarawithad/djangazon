@@ -202,7 +202,7 @@ def profile(request):
     Purpose: to render the profile page in the browser
     Author: Harper Frankstone
     Args: request -- the full HTTP request object
-    Returns: 
+    Returns: renders the profile template in the browser
     """
     template_name = 'profile.html'
     return render(request, template_name, {})
@@ -232,6 +232,7 @@ def add_payment_type(request):
         template_name = 'payment_type_success.html'
         return render(request, template_name, {})
 
+
 @login_required(login_url='/login')
 def user_payment_types(request):
     """
@@ -244,12 +245,28 @@ def user_payment_types(request):
     template_name = 'user_payment_types.html'
     return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
+
+@login_required(login_url='/login')
+def delete_payment_type(request):
+    """
+    Purpose: Delete a payment type from a customer's account
+    Author: Aaron Barfoot
+    Args: payment_type_id
+    Returns: 
+    """
+    if request.method == 'POST':
+        pmt_type_to_delete = request.POST['payment_type_id']
+        pmt_type = PaymentType.objects.get(pk=pmt_type_to_delete).delete()
+
+        return render(request, 'delete_payment_type.html', {'delete_payment_type': delete_payment_type})
+
+
 @login_required(login_url='/login')
 def add_product_to_order(request, product_id):
     """
     Purpose: To add a product (by the product id) to the ProductOrder table.
     Author: Jordan Nelson & Harper Frankstone
-    Args: product_id - the id of the product to be added to the cart
+    Args: product_id - the id of the product to be added to the cart, request --the full HTTP request object 
     Returns: Redirects user to their shopping cart after a successful add
     """
     product_to_add = Product.objects.get(pk=product_id)
@@ -270,7 +287,7 @@ def view_cart(request):
     """
     Purpose: To view the cart of a customer's products
     Author: Jordan Nelson & Harper Frankstone
-    Args: None
+    Args: request --the full HTTP request object
     Returns: A list of the products added to a shopping cart and their total
     """
     total = 0
@@ -296,16 +313,16 @@ def view_cart(request):
 def complete_order_add_payment(request, order_id):
     """
     purpose: Allows user to add a payment type to their order and therefore complete and place the order
-    author: Dara Thomas
-    args: order_id - no clue what to do with this
+    author: Harper Frankstone/Jordan Nelson
+    args: request --the full HTTP request object, order_id - passed to this method from the view_cart method 
     returns: a checkout page where the user sees their order total and can select a payment type for their order
     """
     if request.method == 'POST':
-
+        total = request.POST['total']
         adding_payment_types = PaymentType.objects.filter(customer = request.user)
 
         template_name = 'checkout.html'
-        return render(request, template_name, {'adding_payment_types': adding_payment_types, 'order_id' : order_id})
+        return render(request, template_name, { 'adding_payment_types': adding_payment_types, 'order_id' : order_id, 'total': total })
 
 @login_required(login_url='/login')
 def order_confirmation(request):
@@ -313,7 +330,7 @@ def order_confirmation(request):
     purpose: To mark an order as finished by setting the active field as 0 and writing the 
     payment type used for the order to the database.
     author: Jordan Nelson
-    args: None
+    args: request --the full HTTP request object
     returns: renders the order confirmation table after a successful order completion
     """
     if request.method == 'POST':
@@ -328,4 +345,33 @@ def order_confirmation(request):
         completed_order.save()        
 
         return render(request, 'order_confirmation.html' , {})
+        
+@login_required(login_url='/login')
+def delete_product_from_cart(request):
+    """
+    Purpose: to remove a specific product from the shopping cart on the browser, as well as in the Order table
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object, product_id - the id of the selected product thats going to be deleted
+    Returns: an updated shopping cart without the selected product
+    """
+
+    if request.method == 'POST':
+        deleted_product = request.POST['product_id']
+        order_for_deletion = request.POST['order_id']
+
+        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()         
+
+
+        return HttpResponseRedirect('/cart')
+
+
+
+
+
+
+
+
+
+
+
 

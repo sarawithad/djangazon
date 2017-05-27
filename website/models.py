@@ -5,19 +5,6 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 
-# Create your models here.
-# class Profile(models.Model):
-#     """
-#     purpose: Instantiates a customer, and pulls in Django's default user model
-#     author: Max Baldridge
-#     args: User: model class given by Django
-#     returns: (None): N/A
-#     """      
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-#     def __str__(self):  # __unicode__ on Python 2
-#         return "This user's name is {}".format(self.user.first_name)
-
 
 class ProductType(models.Model):                      
     """
@@ -58,7 +45,7 @@ class Product(models.Model):
         return "/single_product/{}".format(self.id)
 
 
-
+# this is unnecessary and we don't need it, we should just look to the profile class that already has a one to one connection with the django user
 class Customer(models.Model):
     """
     purpose: Instantiates a customer

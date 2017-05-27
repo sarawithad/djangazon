@@ -3,20 +3,22 @@
 {% block content %}
 
 {% load staticfiles %}
-    <h3>Single Product Views</h3>
+    <hr>
+    <h3>Product Detail</h3>
 
-    <ol>
+    <ul>
 
       <li>Title: {{ product.title }}</li>
       <li>Description: {{ product.description }}</li>
       <li>Quantity Available: {{ product.quantity }}</li>
       <li>Price/Unit: {{ product.price }}</li>      
-    </ol>
+    </ul>
 
     {% if user.is_authenticated %}
     <form action="/add_to_cart/{{product.id}}/" method="POST">
+    <hr>
     {% csrf_token %}
-        <button>Add to Cart</button>
+        <button class="btn btn-success btn-lg">Add to Cart</button>
     </form>
     {% endif %}
 
