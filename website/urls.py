@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.views.generic import TemplateView
+# from website.views import CancelView
 
 from . import views
 
@@ -22,5 +24,5 @@ urlpatterns = [
     url(r'^checkout/(?P<order_id>[0-9]+)/$', views.complete_order_add_payment, name='checkout'),
     url(r'^order_confirmation$', views.order_confirmation, name='order_confirmation'),
     url(r'^delete_product_from_cart$', views.delete_product_from_cart, name='delete_product_from_cart'),
-    url(r'^cancel_order$', views.cancel_order, name='cancel_order'),
+    url(r'^final_order_view$', views.view_cancel_order, name='final_order_view'),
 ]

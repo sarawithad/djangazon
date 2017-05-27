@@ -41,12 +41,10 @@
       </form>
       {% endif %}
 
-      {{ product.order_id }}
       {% if user.is_authenticated %}
-      <h1> hello {{ orderid }} </h1>
-      <form action="{% url 'website:cancel_order' %}" method="POST">
+      <h1> Current Order Id: {{ orderid }} </h1>
+      <form action="{% url 'website:final_order_view' %}" method="POST">
         <input type="hidden" name="order_id" value="{{ orderid }}">
-        <!-- <input type="hidden" name="product_id" value="{{ product_id }}"> -->
       {% csrf_token %}
         <button>Cancel Order</button> 
       </form>
