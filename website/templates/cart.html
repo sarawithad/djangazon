@@ -42,7 +42,6 @@
       {% endif %}
 
       {% if user.is_authenticated %}
-      <h1> Current Order Id: {{ orderid }} </h1>
       <form action="{% url 'website:final_order_view' %}" method="POST">
         <input type="hidden" name="order_id" value="{{ orderid }}">
       {% csrf_token %}
