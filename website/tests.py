@@ -22,14 +22,6 @@ class ProductDetailViewTest(TestCase):
             last_name = "Ducharme"
         )
 
-        self.customer = Customer.objects.create(
-            first_name = "Meg",
-            last_name = "Ducharme",
-            user_name = "mducharme",
-            email_address = "meg@meg.com",
-            password = "abcd1234"
-        )
-
         self.product_type = ProductType.objects.create(product_type_name="Test")
 
         self.product = Product.objects.create(
@@ -135,15 +127,6 @@ class PaymentTypesViewTest(TestCase):
             last_name = "Ducharme"
         )
 
-
-        self.customer = Customer.objects.create(
-            first_name = "Meg",
-            last_name = "Ducharme",
-            user_name = "mducharme",
-            email_address = "meg@meg.com",
-            password = "abcd1234"
-        )
-
         self.payment_type = PaymentType.objects.create(
             payment_type_name = "Visa",
             account_number = 1234123412341234,
@@ -193,11 +176,8 @@ class ProductsInCartViewTest(TestCase):
         )
 
         self.customer = Customer.objects.create(
-            first_name = "Meg",
-            last_name = "Ducharme",
-            user_name = "mducharme",
-            email_address = "meg@meg.com",
-            password = "abcd1234"
+            phone = 1234567890,
+            user = self.user
         )
 
         self.product_type = ProductType.objects.create(product_type_name="TestProdType")
@@ -232,10 +212,16 @@ class ProductsInCartViewTest(TestCase):
             quantity = 12
         )
 
-
-        self.order = Order.objects.create(
+        self.payment_type = PaymentType.objects.create(
+            payment_type_name = "MasterCard",
+            account_number = 5678567856785678,
             customer = self.user
         )
+
+        self.order = Order.objects.create(
+            customer = self.user,
+        )
+
 
         self.product_order_1 = ProductOrder.objects.create(
             product = self.product_1,
@@ -261,7 +247,6 @@ class ProductsInCartViewTest(TestCase):
 
         response = self.client.get(reverse('website:cart'))
 
-        print(response.context["products_in_cart"])
         self.assertQuerysetEqual   (response.context["products_in_cart"], ["<ProductOrder: emoji stickers>", "<ProductOrder: Keys>", "<ProductOrder: Magic Wand>"])
 
 

@@ -6,17 +6,17 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 
 # Create your models here.
-class Profile(models.Model):
-    """
-    purpose: Instantiates a customer, and pulls in Django's default user model
-    author: Max Baldridge
-    args: User: model class given by Django
-    returns: (None): N/A
-    """      
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+# class Profile(models.Model):
+#     """
+#     purpose: Instantiates a customer, and pulls in Django's default user model
+#     author: Max Baldridge
+#     args: User: model class given by Django
+#     returns: (None): N/A
+#     """      
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    def __str__(self):  # __unicode__ on Python 2
-        return "This user's name is {}".format(self.user.first_name)
+#     def __str__(self):  # __unicode__ on Python 2
+#         return "This user's name is {}".format(self.user.first_name)
 
 
 class ProductType(models.Model):                      
@@ -66,11 +66,13 @@ class Customer(models.Model):
     args: Extends the models.Model Django class
     returns: (None): N/A
     """   
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    user_name = models.CharField(max_length=30)
-    email_address = models.EmailField(max_length=30)
-    password = models.CharField(max_length=15)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.IntegerField()
+    # first_name = models.CharField(max_length=30)
+    # last_name = models.CharField(max_length=30)
+    # email_address = models.EmailField(max_length=30)
+
+
 
 
 class PaymentType(models.Model):
@@ -112,8 +114,8 @@ class Order(models.Model):
     class Meta:
         ordering = ('order_date',)
 
-    def __str__(self):
-        return self.order_date
+    # def __str__(self):
+    #     return str(self.order_date)
 
 class ProductOrder(models.Model):
     """
