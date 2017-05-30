@@ -12,7 +12,7 @@ from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
 from website.models import Order, ProductOrder
-# standard Django view: query, template name, and a render method to render the data from the query into the s
+# standard Django view: query, template name, and a render method to render the data from the query into the templatex
 
 
 def index(request):
@@ -150,11 +150,8 @@ def single_product(request, product_id):
         for a singular product
         For an example, visit /product_details/1/ to see a view on the first product created
         displaying title, description, quantity, price/unit, and "Add to order" button
-
     author: Max Baldridge
-
     args: product_id: (integer): id of product we are viewing 
-
     returns: (render): a view of the request, template to use, and product obj
     """        
     template_name = 'single.html'
@@ -252,8 +249,8 @@ def delete_payment_type(request):
     """
     Purpose: Delete a payment type from a customer's account
     Author: Aaron Barfoot
-    Args: payment_type_id
-    Returns: 
+    Args: request --the full HTTP request object
+    Returns: n/a
     """
     if request.method == 'POST':
         pmt_type_to_delete = request.POST['payment_type_id']

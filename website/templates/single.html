@@ -15,7 +15,7 @@
     </ul>
 
     {% if user.is_authenticated %}
-    <form action="/add_to_cart/{{product.id}}/" method="POST">
+    <form action="/add_to_cart/{{ product.id }}/" method="POST">
     <hr>
     {% csrf_token %}
         <button class="btn btn-success btn-lg">Add to Cart</button>
