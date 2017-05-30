@@ -267,6 +267,20 @@ def delete_payment_type(request):
 
 
 @login_required(login_url='/login')
+def user_products(request):
+    """
+    Purpose: To retrieve a list og all products for sale by a user
+    Author: Max Baldridge
+    Args: request -- the full HTTP request object
+    Returns: list of products sold by the current user
+    """
+
+    user_products = Product.objects.all().filter(seller = request.user)
+    template_name = 'user_products.html'
+    return render(request, template_name, {'user_products': user_products})
+
+
+@login_required(login_url='/login')
 def add_product_to_order(request, product_id):
     """
     Purpose: To add a product (by the product id) to the ProductOrder table.
