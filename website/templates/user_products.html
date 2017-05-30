@@ -10,7 +10,7 @@
 	<ul>
 	    {% if user.is_authenticated %}
 		{% for product in user_products %}
-		    <a href="{% url 'website:single_product' product.id %}"><li>{{ product.title }} - {{ product.description }}</li></a> 
+		    <li><a href="{% url 'website:single_product' product.id %}">{{ product.title }} - {{ product.description }}</a></li> 
 		    <br>
 		    
 		{% empty %}
