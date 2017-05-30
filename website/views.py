@@ -4,15 +4,16 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import TemplateView
 from datetime import datetime
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
 from website.models import Product
 from website.models import ProductType
-from website.models import Profile
 from website.models import PaymentType
 from website.models import Order, ProductOrder
 # standard Django view: query, template name, and a render method to render the data from the query into the s
+
 
 def index(request):
     """
@@ -255,8 +256,12 @@ def delete_payment_type(request):
     Returns: 
     """
     if request.method == 'POST':
-        pmt_type_to_delete = request.POST['payment_type_id']
-        pmt_type = PaymentType.objects.get(pk=pmt_type_to_delete).delete()
+        try:
+            pmt_type_to_delete = request.POST['payment_type_id']
+            pmt_type = PaymentType.objects.get(pk=pmt_type_to_delete).delete()
+        except:
+            user_payment_types = PaymentType.objects.filter(customer = request.user)
+            return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
         return render(request, 'delete_payment_type.html', {'delete_payment_type': delete_payment_type})
 
@@ -368,6 +373,18 @@ def delete_product_from_cart(request):
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
 
-        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()         
+        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
 
         return HttpResponseRedirect('/cart')
+
+def view_cancel_order(request):
+    """
+    Purpose: to cancel an order and remove it from the database
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object
+    Returns: an updated Order table, without the specific order that has been cancelled
+    """
+    deleted_order = request.POST.get('order_id')
+    Order.objects.get(id=deleted_order).delete()
+
+    return render(request, 'final_order_view.html' , {})

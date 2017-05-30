@@ -1,18 +1,19 @@
 {% extends 'main.html' %}
 {% block content %}
 
-	Category: <br />
+	<hr>
+	<h2>Showing All:
 		{% for product_type in product_types %} 
-			{{ product_type }}
+			{{ product_type }}</h2>
 		{% endfor %}
 
 	<br /><br />
 
-	Products: <br />
+
 		{% for product in products_of_type %} <br />
-			Title: <a href="{{ product.get_absolute_url }}"> {{ product.title }} </a> <br />
-			Price: {{ product.price }} <br />
-			Quantity: {{ product.quantity }} <br />
+			<h3>Product: <a href="{{ product.get_absolute_url }}"> {{ product.title }} </a></h3> <br />
+			<p>Price: {{ product.price }}</p> <br />
+			<p>Quantity: {{ product.quantity }}</p> <br />
 		{% endfor %}
 
- {% endblock %}
+{% endblock %}
