@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import TemplateView
 from datetime import datetime
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
@@ -359,17 +360,24 @@ def delete_product_from_cart(request):
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
 
-        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()         
+        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
 
 
         return HttpResponseRedirect('/cart')
 
 
+def view_cancel_order(request):
+    """
+    Purpose: to cancel an order and remove it from the database
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object
+    Returns: an updated Order table, without the specific order that has been cancelled
+    """
+    deleted_order = request.POST.get('order_id')
+    Order.objects.get(id=deleted_order).delete()
 
 
-
-
-
+    return render(request, 'final_order_view.html' , {})
 
 
 
