@@ -2,15 +2,17 @@
 {% load staticfiles %}
 {% block content %}
 
-      <h1>My Cart</h1>
+      <hr>
+      <h1>My Cart:</h1>
     {% if total is not 0 %}
       <table> 
         <tr>
-          <th>Product Name</th>
-          <th>Product Price</th>
+          <th><h4>Product Name</h4></th>
+          <th><h4>Product Price</h4></th>
         </tr>
+
       {% for product in products_in_cart %}
-        <tr>
+        <tr class="cart-line-item">
           <th> <a href="{% url 'website:single_product' product.product.id %}"> {{ product.product }} </a> </th>
           <th> ${{ product.product.price }} </th>
           <th>
@@ -19,7 +21,7 @@
             {% csrf_token %}
               <input type="hidden" name="product_id" value="{{ product.product_id }}">
               <input type="hidden" name="order_id" value="{{ product.order_id }}">
-              <button>Delete from Cart </button>
+              <button class="btn btn-danger btn-sm">Delete from Cart </button>
             </form> 
 
             {% endif %}
@@ -29,7 +31,7 @@
         <tr>
           <th>Total:</th>
           <th> ${{ total }}</th>
-        </tr>
+        </tr> 
 
       </table>
       {{ orderid }}
@@ -37,7 +39,8 @@
       <form action="/checkout/{{ orderid }}/" method="POST">
       <input type="hidden" name="total" value="{{ total }}">
       {% csrf_token %}
-          <button>Complete Order</button>
+      <br>
+          <button class="btn btn-success btn-md">Complete Order</button>
       </form>
       {% endif %}
 
@@ -48,7 +51,6 @@
         <button>Cancel Order</button> 
       </form>
       {% endif %}
-
 
 
     {% else %}

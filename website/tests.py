@@ -8,8 +8,8 @@ class ProductDetailViewTest(TestCase):
     """
     Purpose: Verify that when a product is created that the Product Detail view has the correct product with the product's title, description, price and quantity in the response context 
     Author: Dara Thomas
-    Args:
-    Returns: 
+    Args: (integer) product pk
+    Returns: Pass/Fail based on successful/unsuccessful assertion
     """
 
     def setUp(self):
@@ -20,14 +20,6 @@ class ProductDetailViewTest(TestCase):
             password = "abcd1234",
             first_name = "Meg",
             last_name = "Ducharme"
-        )
-
-        self.customer = Customer.objects.create(
-            first_name = "Meg",
-            last_name = "Ducharme",
-            user_name = "mducharme",
-            email_address = "meg@meg.com",
-            password = "abcd1234"
         )
 
         self.product_type = ProductType.objects.create(product_type_name="Test")
@@ -118,14 +110,12 @@ class ProductTypeViewTest(TestCase):
         response = self.client.get(reverse('website:get_product_types', args=([self.product_type1.pk])))  
         self.assertQuerysetEqual(response.context['products_of_type'], ["<Product: Magic Hat>", "<Product: Magic Wand>"],ordered=False)
 
-
-
 class PaymentTypesViewTest(TestCase):
     """
     Purpose: Verifies that the Payment Types view for a customer has all of the payment types in the request context
     Author: Dara Thomas
-    Args:
-    Returns: 
+    Args: HTTP request
+    Returns: Pass/Fail based on successful/unsuccessful assertion
     """
 
     def setUp(self):
@@ -135,15 +125,6 @@ class PaymentTypesViewTest(TestCase):
             password = "abcd1234",
             first_name = "Meg",
             last_name = "Ducharme"
-        )
-
-
-        self.customer = Customer.objects.create(
-            first_name = "Meg",
-            last_name = "Ducharme",
-            user_name = "mducharme",
-            email_address = "meg@meg.com",
-            password = "abcd1234"
         )
 
         self.payment_type = PaymentType.objects.create(
@@ -176,7 +157,97 @@ class PaymentTypesViewTest(TestCase):
 
 
 
+class ProductsInCartViewTest(TestCase):
+    """
+    Purpose: Verify that when products are added to an order that the Order Summary view has those products in the response context
+    Author: Dara Thomas
+    Args: (integer) product pk
+    Returns: Pass/Fail based on successful/unsuccessful assertion
+    """
+        
+    def test_products_show_in_cart(self):
+        
+        self.user = User.objects.create_user(
+            username = "mducharme",
+            email = "meg@meg.com",
+            password = "abcd1234",
+            first_name = "Meg",
+            last_name = "Ducharme"
+        )
 
+        self.customer = Customer.objects.create(
+            phone = 1234567890,
+            user = self.user
+        )
+
+        self.product_type = ProductType.objects.create(product_type_name="TestProdType")
+
+        
+        self.product_1 = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
+            title = "emoji stickers",
+            description = "yay!",
+            price = 1.99,
+            quantity = 500
+        )
+
+
+        self.product_2 = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
+            title = "Keys",
+            description = "They're keys",
+            price = 3.00,
+            quantity = 100
+        )
+
+
+        self.product_3 = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
+            title = "Magic Wand",
+            description = "oh oh it's magic",
+            price = 5.99,
+            quantity = 12
+        )
+
+        self.payment_type = PaymentType.objects.create(
+            payment_type_name = "MasterCard",
+            account_number = 5678567856785678,
+            customer = self.user
+        )
+
+        self.order = Order.objects.create(
+            customer = self.user,
+        )
+
+
+        self.product_order_1 = ProductOrder.objects.create(
+            product = self.product_1,
+            order = self.order
+        )
+
+        self.product_order_2 = ProductOrder.objects.create(
+            product = self.product_2,
+            order = self.order
+        )
+
+
+        self.product_order_3 = ProductOrder.objects.create(
+            product = self.product_3,
+            order = self.order
+        )
+
+        self.client.login(
+            username = "mducharme",
+            password = "abcd1234"
+        )
+
+
+        response = self.client.get(reverse('website:cart'))
+
+        self.assertQuerysetEqual   (response.context["products_in_cart"], ["<ProductOrder: emoji stickers>", "<ProductOrder: Keys>", "<ProductOrder: Magic Wand>"])
 
 
 
