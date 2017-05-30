@@ -12,7 +12,7 @@ from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
 from website.models import Order, ProductOrder
-# standard Django view: query, template name, and a render method to render the data from the query into the templatex
+# standard Django view: query, template name, and a render method to render the data from the query into the template
 
 
 def index(request):
@@ -156,8 +156,7 @@ def single_product(request, product_id):
     """        
     template_name = 'single.html'
     product = get_object_or_404(Product, pk=product_id)            
-    return render(request, template_name, {
-        "product": product})
+    return render(request, template_name, {"product": product})
 
 def list_product_types(request):
     """
@@ -202,8 +201,19 @@ def profile(request):
     Args: request -- the full HTTP request object
     Returns: renders the profile template in the browser
     """
+    # I need to query the Order table then see what I'm getting back
+    # I may need to dig into the object
+    # Then I will need to format the data to feed it to the template via the context
+    # In the template, I need to write the hyperlinks to each order, meaning I need an order_detail template
+
+
+    try:
+        past_orders = Order.objects.all().filter(customer=request.user)
+    except: 
+        alert('There is no Order History for this customer.')
+
     template_name = 'profile.html'
-    return render(request, template_name, {})
+    return render(request, template_name, {'past_orders': past_orders})
 
 
 @login_required(login_url='/login')
@@ -379,6 +389,20 @@ def view_cancel_order(request):
 
 
     return render(request, 'final_order_view.html' , {})
+
+def view_order_detail(request, order_id):
+    """
+    Purpose: to show the user's past orders
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object, order_id - the id of the order 
+    Returns: a view of order's details (products on the order and total cost)
+    """
+
+    # will be similar code to the single product detail page
+    template_name = 'order_detail.html'
+    order = get_object_or_404(Order, pk=order_id)            
+    return render(request, template_name, {"order": order})
+
 
 
 

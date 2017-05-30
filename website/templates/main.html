@@ -1,3 +1,4 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,6 @@
 	{% block title %}
 	<title>Djangazon</title>
 	{% endblock %}
-	<!-- load all scripts and css links here, remember {% load static %} -->
 	{%include "styles.html"%}
 	<link rel="stylesheet" type="text/css" href="{% static 'main.css' %}" />
 </head>

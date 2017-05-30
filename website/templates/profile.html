@@ -9,6 +9,11 @@
 		<p><strong>First Name:</strong></p>{{user.first_name}}
 		<p><strong>Last Name:</strong></p>{{user.last_name}}
 		<p><strong>Email:</strong></p>{{user.email}}
+		<p><strong>Order History:</strong></p>
+		{% for order in past_orders %}
+			<p><a href="{% url 'website:order_detail' order.id %}">{{order.id}}</a></p>
+		{% endfor %}
+		<!-- hyperlink the order ids to an order_detail view -->
 	{% endif %}
 
 	<br>
