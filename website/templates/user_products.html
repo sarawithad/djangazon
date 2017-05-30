@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% load staticfiles %}
+
+    <h3> {{ user.username}} Products</h3>
+
+
+	<ul>
+	    {% if user.is_authenticated %}
+		{% for product in user_products %}
+		    <a href="{% url 'website:single_product' product.id %}"><li>{{ product.title }} - {{ product.description }}</li></a> 
+		    <br>
+		    
+		{% empty %}
+		    
+	    {% endfor %}
+	</ul>     
+
+	    	<a class="btn btn-default" href="create">Sell Another Product</a>
+
+		{% endif %}
+
+
+{% endblock %}
