@@ -11,10 +11,7 @@
 </head>
 <body>
 	{%include "navbar.html"%}
-	<h1>WELCOME TO BANGAZON!</h1>
-	{% if user.is_authenticated %}
-    <h1>Bangazon says... hello {{ user.username }}!</h1>
-    {% endif %}
+	<h4>BANGAZON!</h4>
 
 
 	{% block content %}{% endblock %}
