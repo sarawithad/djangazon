@@ -253,8 +253,12 @@ def delete_payment_type(request):
     Returns: n/a
     """
     if request.method == 'POST':
-        pmt_type_to_delete = request.POST['payment_type_id']
-        pmt_type = PaymentType.objects.get(pk=pmt_type_to_delete).delete()
+        try:
+            pmt_type_to_delete = request.POST['payment_type_id']
+            pmt_type = PaymentType.objects.get(pk=pmt_type_to_delete).delete()
+        except:
+            user_payment_types = PaymentType.objects.filter(customer = request.user)
+            return render(request, 'user_payment_types.html', {'user_payment_types': user_payment_types})
 
         return render(request, 'delete_payment_type.html', {'delete_payment_type': delete_payment_type})
 

@@ -1,8 +1,6 @@
 {% extends 'main.html' %}
 {% load staticfiles %}
 
-
-
 {% block content %}
 
 	<hr>
@@ -21,7 +19,6 @@
 		    <br>
 		    
 		{% empty %}
-			<h3>Nice try, you need to add a payment type</h3><br>
 		    <a class="btn btn-default" href="add_payment_type">Add a Payment Type</a>
 	    {% endfor %}
 	</ul>       
