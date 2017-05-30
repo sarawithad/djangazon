@@ -1,4 +1,4 @@
-# BangazonCLI
+# djangazon
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 This web application is the source code for the Bangazon e-commerce web site. It is powered by Python and Django.
@@ -53,11 +53,11 @@ python manage.py runserver
 ## Contribute
 1. Fork it!
 2. Create your feature branch:
-```git checkout -b <new-feature-branch-name-here>```
+```git checkout -b <YourInititals-WhatNewFeatureDoes>```
 3. Commit your changes:
 ```git commit -m 'Add some feature'```
 4. Push to the branch:
-```git push origin <new-feature-branch-name-here-too>```
+```git push origin <YourInititals-WhatNewFeatureDoes>```
 5. Submit a pull request :D
 
 Small note: If editing the Readme, please conform to the [standard-readme](https://github.com/RichardLitt/standard-readme) specification.
