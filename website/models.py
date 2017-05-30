@@ -37,6 +37,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False)
     quantity = models.IntegerField()
+    quantity_sold = models.IntegerField(default=0)
     
     def __str__(self):
         return self.title
@@ -100,9 +101,6 @@ class Order(models.Model):
 
     class Meta:
         ordering = ('order_date',)
-
-    # def __str__(self):
-    #     return str(self.order_date)
 
 class ProductOrder(models.Model):
     """

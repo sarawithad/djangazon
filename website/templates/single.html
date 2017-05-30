@@ -10,7 +10,12 @@
 
       <li>Title: {{ product.title }}</li>
       <li>Description: {{ product.description }}</li>
-      <li>Quantity Available: {{ product.quantity }}</li>
+      {% if product.quantity > 0 %}
+        <li>Quantity Available: {{ product.quantity }}</li>
+      {% else %}
+        <li>Quantity Available: Out of Stock</li>
+      {% endif %}
+      <li>Quantity Sold: {{ product.quantity_sold }}</li>
       <li>Price/Unit: {{ product.price }}</li>      
     </ul>
     

@@ -12,6 +12,7 @@ from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
 from website.models import Order, ProductOrder
+
 # standard Django view: query, template name, and a render method to render the data from the query into the s
 
 
@@ -276,9 +277,6 @@ def add_product_to_order(request, product_id):
     """
     product_to_add = Product.objects.get(pk=product_id)
 
-    if product_to_add.quantity <= 0:
-        print('Need to Prevent This in Database')
-
     try:
         customer = request.user
         new_order = Order.objects.get(customer=customer, active=1)
@@ -286,7 +284,10 @@ def add_product_to_order(request, product_id):
         customer = request.user
         new_order = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
 
-    add_to_ProductOrder = ProductOrder.objects.create(product=product_to_add, order=new_order)
+    if product_to_add.quantity <= 0:
+        pass
+    elif product_to_add.quantity > 0:
+        add_to_ProductOrder = ProductOrder.objects.create(product=product_to_add, order=new_order)
 
     return HttpResponseRedirect('/cart')
 
@@ -350,6 +351,7 @@ def order_confirmation(request):
         for each_product in products_on_order:
             prodid = Product.objects.get(pk=each_product)
             prodid.quantity = prodid.quantity - 1
+            prodid.quantity_sold = prodid.quantity_sold + 1
             prodid.save()
 
         completed_order = Order.objects.get(pk=order_id)
