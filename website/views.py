@@ -366,10 +366,6 @@ def delete_product_from_cart(request):
         return HttpResponseRedirect('/cart')
 
 
-class CancelView(TemplateView):
-    template_name = 'cancel_order.html'
-
-
 def view_cancel_order(request):
     """
     Purpose: to cancel an order and remove it from the database
@@ -378,8 +374,6 @@ def view_cancel_order(request):
     Returns: an updated Order table, without the specific order that has been cancelled
     """
     deleted_order = request.POST.get('order_id')
-    print("deleted order ",deleted_order)
-
     Order.objects.get(id=deleted_order).delete()
 
 
