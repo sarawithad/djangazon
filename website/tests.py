@@ -251,6 +251,17 @@ class ProductsInCartViewTest(TestCase):
 
 
 
+class OrderHistoryViewTest(TestCase):
+    """
+    Purpose: to test that the order history is showing orders that correspond with the authenticated user
+    Author: Harper Frankstone   
+    Args: extends the TestCase 
+    Returns: Pass/Fail based on successful/unsuccessful assertion
+    """
+
+    def test_order_history(self):
+
+        self.
 
 
 
