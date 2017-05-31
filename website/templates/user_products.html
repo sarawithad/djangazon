@@ -4,13 +4,16 @@
 
 {% load staticfiles %}
 
-    <h3> {{ user.username}} Products</h3>
+    <h3> <a href="/profile"><u>{{ user.username}}'s</u></a> Products</h3>
 
 
 	<ul>
 	    {% if user.is_authenticated %}
 		{% for product in user_products %}
-		    <li><a href="{% url 'website:single_product' product.id %}">{{ product.title }} - {{ product.description }}</a></li> 
+		    <li>
+                <a href="{% url 'website:single_product' product.id %}">{{ product.title }} - {{ product.description|truncatewords:8 }}</a>
+                <button class="btn btn-danger btn-med">Delet.This</button>
+            </li> 
 		    <br>
 		    
 		{% empty %}
