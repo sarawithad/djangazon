@@ -13,7 +13,8 @@ from website.models import ProductType
 from website.models import PaymentType
 from website.models import Order, ProductOrder
 
-# standard Django view: query, template name, and a render method to render the data from the query into the s
+# standard Django view: query, template name, and a render method to render the data from the query into the template
+
 
 
 def index(request):
@@ -151,17 +152,13 @@ def single_product(request, product_id):
         for a singular product
         For an example, visit /product_details/1/ to see a view on the first product created
         displaying title, description, quantity, price/unit, and "Add to order" button
-
     author: Max Baldridge
-
     args: product_id: (integer): id of product we are viewing 
-
     returns: (render): a view of the request, template to use, and product obj
     """        
     template_name = 'single.html'
     product = get_object_or_404(Product, pk=product_id)            
-    return render(request, template_name, {
-        "product": product})
+    return render(request, template_name, {"product": product})
 
 def list_product_types(request):
     """
@@ -206,8 +203,19 @@ def profile(request):
     Args: request -- the full HTTP request object
     Returns: renders the profile template in the browser
     """
+    # I need to query the Order table then see what I'm getting back
+    # I may need to dig into the object
+    # Then I will need to format the data to feed it to the template via the context
+    # In the template, I need to write the hyperlinks to each order, meaning I need an order_detail template
+
+
+    try:
+        past_orders = Order.objects.all().filter(customer=request.user)
+    except: 
+        alert('There is no Order History for this customer.')
+
     template_name = 'profile.html'
-    return render(request, template_name, {})
+    return render(request, template_name, {'past_orders': past_orders})
 
 
 @login_required(login_url='/login')
@@ -253,8 +261,8 @@ def delete_payment_type(request):
     """
     Purpose: Delete a payment type from a customer's account
     Author: Aaron Barfoot
-    Args: payment_type_id
-    Returns: 
+    Args: request --the full HTTP request object
+    Returns: n/a
     """
     if request.method == 'POST':
         try:
@@ -404,3 +412,25 @@ def view_cancel_order(request):
     Order.objects.get(id=deleted_order).delete()
 
     return render(request, 'final_order_view.html' , {})
+
+
+def view_order_detail(request, order_id):
+    """
+    Purpose: to show the user's past orders
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object, order_id - the id of the order 
+    Returns: a view of order's details (products on the order and total cost)
+    """
+
+    total = 0
+
+    products_in_cart = ProductOrder.objects.all().filter(order=order_id)
+
+    for each_item in products_in_cart:
+        total += each_item.product.price
+
+    template_name = 'order_detail.html'
+    order = get_object_or_404(Order, pk=order_id)            
+    return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
+
+
