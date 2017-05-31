@@ -12,11 +12,11 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password', 'first_name', 'last_name',)
 
-class ProductForm(forms.ModelForm):
+class ProductForm(forms.ModelForm): 
 
     class Meta:
         model = Product
-        fields = ('title', 'description', 'price', 'quantity', 'product_type')
+        fields = ('title', 'description', 'price', 'quantity', 'product_type', 'product_photo', 'city',)
 
 class PaymentTypeForm(forms.ModelForm):
 

@@ -8,6 +8,7 @@
 
 
 	<ul>
+
         {% if user.is_authenticated %}
         {% for product in user_products %}
             <h4><u>Product: <a href="{% url 'website:single_product' product.id %}">{{ product.title }}</u></h4></a> 
