@@ -8,18 +8,24 @@
 
 
 	<ul>
-	    {% if user.is_authenticated %}
-		{% for product in user_products %}
-		    <li>
-                <a href="{% url 'website:single_product' product.id %}">{{ product.title }} - {{ product.description|truncatewords:8 }}</a>
-                <button class="btn btn-danger btn-med">Delet.This</button>
-            </li> 
-		    <br>
-		    
-		{% empty %}
-		    
-	    {% endfor %}
-	</ul>     
+        {% if user.is_authenticated %}
+        {% for product in user_products %}
+            <h4><u>Product: <a href="{% url 'website:single_product' product.id %}">{{ product.title }}</u></h4></a> 
+            <li>Cost: {{ product.price }}
+            <br>
+
+            <li>Products Sold: {{ product.quantity_sold }}</li>
+            <li>Inventory Remaining: {{ product.quantity }}</li>
+            <form id="login_form" method="post" action="{% url 'website:user_products' %}">
+              {% csrf_token %}
+                <input name="product_id" type="hidden" value="{{ product.id }}"/>
+                <input class="btn btn-danger" type="submit" value="Delete Product"/>
+            </form>
+            <br>
+        {% empty %}
+            
+        {% endfor %}
+    </ul>     
 
 	    	<a class="btn btn-default" href="/sell">Sell Another Product</a>
 
@@ -27,3 +33,5 @@
 
 
 {% endblock %}
+
+<button class="btn btn-danger btn-med">Delet.This</button>
