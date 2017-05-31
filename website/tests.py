@@ -3,7 +3,7 @@ from website.models import *
 from website.views import *
 from django.urls import reverse
 
-
+# this class alone is throwing the errors. I think it is because of some values that don't exist 
 class ProductDetailViewTest(TestCase):
     """
     Purpose: Verify that when a product is created that the Product Detail view has the correct product with the product's title, description, price and quantity in the response context 
@@ -259,9 +259,43 @@ class OrderHistoryViewTest(TestCase):
     Returns: Pass/Fail based on successful/unsuccessful assertion
     """
 
-    def test_order_history(self):
+    def setUp(self):
 
-        self.
+        self.user = User.objects.create_user(
+            username = "jnelson",
+            email = "jordo@jordo.com",
+            password = "abcd1234",
+            first_name = "Jordan",
+            last_name = "Nelson"
+        )
 
+        self.customer = Customer.objects.create(
+            phone = 1234567890,
+            user = self.user
+        )
 
+        self.product_type = ProductType.objects.create(product_type_name="TestProdType")
 
+        self.product = Product.objects.create(
+            seller = self.user,
+            product_type = self.product_type,
+            title = "Beard Comb",
+            description = "Finest Facial Comb in the Land",
+            price = "5.25",
+            quantity = "500"
+        )
+
+        self.order = Order.objects.create(
+            customer = self.user,
+        )
+
+        self.product_order_1 = ProductOrder.objects.create(
+            product = self.product,
+            order = self.order
+        )
+
+    def test_order_history_view(self):
+        response = self.client.get(reverse('website:order_detail', args=([self.product.pk])))
+        print('The response: ', response)
+        self.assertContains(response, "Beard Comb")
+        self.assertContains(response, "5.25")

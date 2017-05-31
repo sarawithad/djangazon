@@ -203,11 +203,6 @@ def profile(request):
     Args: request -- the full HTTP request object
     Returns: renders the profile template in the browser
     """
-    # I need to query the Order table then see what I'm getting back
-    # I may need to dig into the object
-    # Then I will need to format the data to feed it to the template via the context
-    # In the template, I need to write the hyperlinks to each order, meaning I need an order_detail template
-
 
     try:
         past_orders = Order.objects.all().filter(customer=request.user)
