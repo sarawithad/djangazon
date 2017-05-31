@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<hr>
+<h3>Search Results:</h3>
+  <ul>
+  {% for product in search %}
+    <li><a href="{% url 'website:single_product' product.id %}">{{ product.title }} - {{ product.description }}</a></li> 
+  {% endfor %}
+  </ul>
+{% endblock %}

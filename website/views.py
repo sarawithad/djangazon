@@ -14,6 +14,8 @@ from website.models import ProductType
 from website.models import PaymentType
 from website.models import Order, ProductOrder
 
+from django.db.models import Q
+
 # standard Django view: query, template name, and a render method to render the data from the query into the template
 
 
@@ -420,6 +422,23 @@ def view_cancel_order(request):
     return render(request, 'final_order_view.html' , {})
 
 
+def search(request):
+    """
+    Purpose: Search for a product by title using search bar in nav.
+    Author: Aaron Barfoot
+    Args: request -- the full HTTP request object
+    Returns: List of products matching search parameters entered by user.
+    """
+    all_products = Product.objects.all().order_by("title")
+    query = request.GET.get("q")
+    if query:
+        products = all_products.filter(
+            Q(title__contains=query)).distinct()
+        return render(request, 'query_results.html', {'search': products})
+    
+    return render(request, 'query_results.html', {})
+
+
 def view_order_detail(request, order_id):
     """
     Purpose: to show the user's past orders
@@ -438,5 +457,6 @@ def view_order_detail(request, order_id):
     template_name = 'order_detail.html'
     order = get_object_or_404(Order, pk=order_id)            
     return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
+
 
 

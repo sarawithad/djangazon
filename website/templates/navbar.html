@@ -9,13 +9,19 @@
             </a>
         </li>
         <li>
-            <form class="navbar-form navbar-left" role="search">
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Search">
-              </div>
+            <form action= "{% url 'website:search' %}" type="get" class="navbar-form navbar-left" role="search">
+                <input id="search_input" method="get" name="q" type="text" class="form-control" placeholder="Search Products">
+                <input class="btn btn-default btn-sm" type="submit" value="Search">
             </form>
         </li>
-        <li class="">
+        <li>
+            <a href="/products">
+            <button type="button" class="btn btn-primary btn-sm">
+                    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>  All Products
+            </button>
+            </a>
+        </li>
+        <li>
             <a href="/product_types">
             <button type="button" class="btn btn-primary btn-sm">
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>  Product Categories
