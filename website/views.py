@@ -398,7 +398,6 @@ def view_order_detail(request, order_id):
     Returns: a view of order's details (products on the order and total cost)
     """
 
-    # will be similar code to the single product detail page
     total = 0
 
     products_in_cart = ProductOrder.objects.all().filter(order=order_id)
