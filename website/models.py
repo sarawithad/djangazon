@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils import timezone
-
+from sorl.thumbnail import ImageField
 
 class ProductType(models.Model):                      
     """
@@ -38,7 +38,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=8, decimal_places=2, null=False)
     quantity = models.IntegerField()
     quantity_sold = models.IntegerField(default=0)
-    
+    product_photo = models.ImageField() 
+
     def __str__(self):
         return self.title
 

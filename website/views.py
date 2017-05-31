@@ -109,7 +109,7 @@ def user_logout(request):
 def sell_product(request):
     """
     Purpose: to present the user with a form to upload information about a product to sell
-    Author: Boilerplate code
+    Author: Jordan Nelson
     Args: request -- the full HTTP request object
     Returns: a form that lets a user upload a product to sell
     """
@@ -119,20 +119,26 @@ def sell_product(request):
         return render(request, template_name, {'product_form': product_form})
 
     elif request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
         form_data = request.POST
-        pt = ProductType.objects.get(pk=form_data['product_type'])
-        p = Product(
-            seller = request.user,
-            title = form_data['title'],
-            description = form_data['description'],
-            price = form_data['price'],
-            quantity = form_data['quantity'],
-            product_type = pt,
-        )
-        p.save()
-        template_name = 'success.html'
-        return render(request, template_name, {})
+        
+        if form.is_valid():
 
+            product = Product()
+
+            product.seller = request.user
+            product.title = form.cleaned_data['title']
+            product.description = form.cleaned_data['description']
+            product.price = form.cleaned_data['price']
+            product.quantity = form.cleaned_data['quantity']
+            product.product_type = ProductType.objects.get(pk=form_data['product_type'])
+            product.product_photo = form.cleaned_data['product_photo']
+
+            product.save()
+
+            return render(request, 'success.html', {})
+        else:
+            return HttpResponse('Failure Submitting Form')      
 
 def list_products(request):
     """
@@ -162,6 +168,7 @@ def single_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)            
     return render(request, template_name, {
         "product": product})
+
 
 def list_product_types(request):
     """

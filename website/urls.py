@@ -1,4 +1,6 @@
 from django.conf.urls import url
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 
@@ -24,3 +26,5 @@ urlpatterns = [
     url(r'^delete_product_from_cart$', views.delete_product_from_cart, name='delete_product_from_cart'),
     url(r'^final_order_view$', views.view_cancel_order, name='final_order_view'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
