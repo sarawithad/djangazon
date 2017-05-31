@@ -2,11 +2,22 @@
 
 {% block content %}
 
+{% load thumbnail %}
 {% load staticfiles %}
+
     <hr>
     <h3>Product Detail</h3>
 
     <ul>
+    {% if product.product_photo %}
+      <li>
+        {% thumbnail product.product_photo "250x250" crop="center" as im %}
+          <a href="{{ product.product_photo.url }}" target="_new">
+          <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+          </a>
+        {% endthumbnail %}
+      </li>
+    {% endif %}
 
       <li>Title: {{ product.title }}</li>
       <li>Description: {{ product.description }}</li>
@@ -21,13 +32,15 @@
     
   {% if user.is_authenticated %}
       {% if product.quantity > 0 %}
-        <form action="/add_to_cart/{{product.id}}/" method="POST">
-          {% csrf_token %}
-            <button class="btn btn-success btn-lg">Add to Cart</button>
-        </form>
-        
+
+      <form action="/add_to_cart/{{ product.id }}/" method="POST">
+      <hr>
+      {% csrf_token %}
+          <button class="btn btn-success btn-lg">Add to Cart</button>
+      </form>
       {% endif %}
-      {% endif %}
+  {% endif %}
+
 
 
 {% endblock %}

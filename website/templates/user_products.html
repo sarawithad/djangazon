@@ -10,13 +10,16 @@
 	<ul>
 	    {% if user.is_authenticated %}
 		{% for product in user_products %}
-		    <li><a href="{% url 'website:single_product' product.id %}">{{ product.title }} - {{ product.description }}</a></li> 
-		    <br>
-		    
+		    <li>Product: <a href="{% url 'website:single_product' product.id %}">{{ product.title }}</a></li> 
+		    <li>Description: {{ product.description }}</li>
+		    <li>Type: {{ product.product_type }}</li>
+		    <li>Cost: {{ product.price }}
+		    <li>Inventory: {{ product.quantity }} - Products Sold: {{ product.quantity_sold }}</li>
+		    <br />
 		{% empty %}
 		    
 	    {% endfor %}
-	</ul>     
+	</ul>
 
 	    	<a class="btn btn-default" href="/sell">Sell Another Product</a>
 
