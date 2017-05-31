@@ -3,7 +3,6 @@ from website.models import *
 from website.views import *
 from django.urls import reverse
 
-# this class alone is throwing the errors. I think it is because of some values that don't exist 
 class ProductDetailViewTest(TestCase):
     """
     Purpose: Verify that when a product is created that the Product Detail view has the correct product with the product's title, description, price and quantity in the response context 
