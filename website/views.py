@@ -136,6 +136,7 @@ def sell_product(request):
             product.quantity = form.cleaned_data['quantity']
             product.product_type = ProductType.objects.get(pk=form_data['product_type'])
             product.product_photo = form.cleaned_data['product_photo']
+            product.city = form.cleaned_data['city']
 
             product.save()
 
@@ -429,7 +430,7 @@ def search(request):
     query = request.GET.get("q")
     if query:
         products = all_products.filter(
-            Q(title__contains=query)).distinct()
+            Q(title__contains=query) | Q(city__contains=query)).distinct()
         return render(request, 'query_results.html', {'search': products})
     
     return render(request, 'query_results.html', {})

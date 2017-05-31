@@ -28,6 +28,7 @@
       {% endif %}
       <li>Quantity Sold: {{ product.quantity_sold }}</li>
       <li>Price/Unit: {{ product.price }}</li>      
+      <li>Available in: {{ product.city }}</li>      
     </ul>
     
   {% if user.is_authenticated %}
