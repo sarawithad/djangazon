@@ -31,7 +31,7 @@ Install Dependencies:
 
 Install Pillow: ```pip install pillow```
 
-Install Sorl-Thumnaul: ```pip install git+https://github.com/mariocesar/sorl-thumbnail.git#egg=sorl-thumbnail```
+Install Sorl-Thumnail: ```pip install git+https://github.com/mariocesar/sorl-thumbnail.git#egg=sorl-thumbnail```
 
 ## Installation
 ```
