@@ -15,7 +15,8 @@ from website.models import Order, ProductOrder
 
 from django.db.models import Q
 
-# standard Django view: query, template name, and a render method to render the data from the query into the s
+# standard Django view: query, template name, and a render method to render the data from the query into the template
+
 
 
 def index(request):
@@ -111,7 +112,7 @@ def user_logout(request):
 def sell_product(request):
     """
     Purpose: to present the user with a form to upload information about a product to sell
-    Author: Boilerplate code
+    Author: Jordan Nelson
     Args: request -- the full HTTP request object
     Returns: a form that lets a user upload a product to sell
     """
@@ -121,20 +122,26 @@ def sell_product(request):
         return render(request, template_name, {'product_form': product_form})
 
     elif request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
         form_data = request.POST
-        pt = ProductType.objects.get(pk=form_data['product_type'])
-        p = Product(
-            seller = request.user,
-            title = form_data['title'],
-            description = form_data['description'],
-            price = form_data['price'],
-            quantity = form_data['quantity'],
-            product_type = pt,
-        )
-        p.save()
-        template_name = 'success.html'
-        return render(request, template_name, {})
+        
+        if form.is_valid():
 
+            product = Product()
+
+            product.seller = request.user
+            product.title = form.cleaned_data['title']
+            product.description = form.cleaned_data['description']
+            product.price = form.cleaned_data['price']
+            product.quantity = form.cleaned_data['quantity']
+            product.product_type = ProductType.objects.get(pk=form_data['product_type'])
+            product.product_photo = form.cleaned_data['product_photo']
+
+            product.save()
+
+            return render(request, 'success.html', {})
+        else:
+            return HttpResponse('Failure Submitting Form')      
 
 def list_products(request):
     """
@@ -153,17 +160,14 @@ def single_product(request, product_id):
         for a singular product
         For an example, visit /product_details/1/ to see a view on the first product created
         displaying title, description, quantity, price/unit, and "Add to order" button
-
     author: Max Baldridge
-
     args: product_id: (integer): id of product we are viewing 
-
     returns: (render): a view of the request, template to use, and product obj
     """        
     template_name = 'single.html'
     product = get_object_or_404(Product, pk=product_id)            
-    return render(request, template_name, {
-        "product": product})
+    return render(request, template_name, {"product": product})
+
 
 def list_product_types(request):
     """
@@ -208,8 +212,14 @@ def profile(request):
     Args: request -- the full HTTP request object
     Returns: renders the profile template in the browser
     """
+
+    try:
+        past_orders = Order.objects.all().filter(customer=request.user)
+    except: 
+        alert('There is no Order History for this customer.')
+
     template_name = 'profile.html'
-    return render(request, template_name, {})
+    return render(request, template_name, {'past_orders': past_orders})
 
 
 @login_required(login_url='/login')
@@ -255,8 +265,8 @@ def delete_payment_type(request):
     """
     Purpose: Delete a payment type from a customer's account
     Author: Aaron Barfoot
-    Args: payment_type_id
-    Returns: 
+    Args: request --the full HTTP request object
+    Returns: n/a
     """
     if request.method == 'POST':
         try:
@@ -407,6 +417,7 @@ def view_cancel_order(request):
 
     return render(request, 'final_order_view.html' , {})
 
+
 def search(request):
     """
     Purpose: Search
@@ -425,6 +436,24 @@ def search(request):
     return render(request, template_name, {'search': products})
 
 
+def view_order_detail(request, order_id):
+    """
+    Purpose: to show the user's past orders
+    Author: Harper Frankstone
+    Args: request -- the full HTTP request object, order_id - the id of the order 
+    Returns: a view of order's details (products on the order and total cost)
+    """
+
+    total = 0
+
+    products_in_cart = ProductOrder.objects.all().filter(order=order_id)
+
+    for each_item in products_in_cart:
+        total += each_item.product.price
+
+    template_name = 'order_detail.html'
+    order = get_object_or_404(Order, pk=order_id)            
+    return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
 
 
 
