@@ -90,7 +90,7 @@ class Order(models.Model):
     author: Dara Thomas
     args: Extends the models.Model Django class
     returns: (None): N/A
-    """   
+    """
     order_date = models.DateTimeField('Order Date', null=True)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     payment_type = models.ForeignKey(PaymentType, on_delete=models.PROTECT, null=True)

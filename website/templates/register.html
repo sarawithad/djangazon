@@ -21,7 +21,8 @@
             {{ user_form.as_p }}
 
             <!-- Provide a button to click to submit the form. -->
-            <input type="submit" name="submit" value="Register" />
+            <input id="register-submit-button" type="submit" name="submit" value="Register" style="display: none;" />
+            <label for="register-submit-button" class="btn btn-warning btn-md">Register</label>
         </form>
         {% endif %}
 {% endblock %}
