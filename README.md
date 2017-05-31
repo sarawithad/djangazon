@@ -22,11 +22,14 @@ Install [pip](https://packaging.python.org/installing/)
 
 Install [Python 3.6](https://www.python.org/downloads/)
 
-Install Django and REST framework:
+Install Django:
 ```
 pip install django
-pip install djangorestframework
 ```
+
+Install Dependencies:
+Install Pillow: ```pip install pillow```
+Install Sorl-Thumnaul: ```pip install git+https://github.com/mariocesar/sorl-thumbnail.git#egg=sorl-thumbnail```
 
 ## Installation
 ```
