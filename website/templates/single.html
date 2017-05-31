@@ -32,6 +32,7 @@
     
   {% if user.is_authenticated %}
       {% if product.quantity > 0 %}
+
       <form action="/add_to_cart/{{ product.id }}/" method="POST">
       <hr>
       {% csrf_token %}
@@ -39,6 +40,7 @@
       </form>
       {% endif %}
   {% endif %}
+
 
 
 {% endblock %}
