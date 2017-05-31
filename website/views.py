@@ -13,6 +13,8 @@ from website.models import ProductType
 from website.models import PaymentType
 from website.models import Order, ProductOrder
 
+from django.db.models import Q
+
 # standard Django view: query, template name, and a render method to render the data from the query into the s
 
 
@@ -404,3 +406,25 @@ def view_cancel_order(request):
     Order.objects.get(id=deleted_order).delete()
 
     return render(request, 'final_order_view.html' , {})
+
+def search(request):
+    """
+    Purpose: Search
+    Author: Aaron Barfoot
+    Args: request -- the full HTTP request object
+    Returns: list of products matching search parameters entered by user
+    """
+    all_products = Product.objects.all().order_by("title")
+    query = request.GET.get("q")
+    if query:
+        products = all_products.filter(
+            Q(title__contains=query)).distinct()
+    
+    template_name = 'query_results.html'
+    
+    return render(request, template_name, {'search': products})
+
+
+
+
+

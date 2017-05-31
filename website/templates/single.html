@@ -23,7 +23,7 @@
       {% if product.quantity > 0 %}
         <form action="/add_to_cart/{{product.id}}/" method="POST">
           {% csrf_token %}
-            <button>Add to Cart</button>
+            <button class="btn btn-success btn-sml">Add to Cart</button>
         </form>
       {% endif %}
 
