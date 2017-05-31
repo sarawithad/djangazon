@@ -10,9 +10,23 @@
 
       <li>Title: {{ product.title }}</li>
       <li>Description: {{ product.description }}</li>
-      <li>Quantity Available: {{ product.quantity }}</li>
+      {% if product.quantity > 0 %}
+        <li>Quantity Available: {{ product.quantity }}</li>
+      {% else %}
+        <li>Quantity Available: Out of Stock</li>
+      {% endif %}
+      <li>Quantity Sold: {{ product.quantity_sold }}</li>
       <li>Price/Unit: {{ product.price }}</li>      
     </ul>
+    
+  {% if user.is_authenticated %}
+      {% if product.quantity > 0 %}
+        <form action="/add_to_cart/{{product.id}}/" method="POST">
+          {% csrf_token %}
+            <button>Add to Cart</button>
+        </form>
+      {% endif %}
+
 
     {% if user.is_authenticated %}
     <form action="/add_to_cart/{{ product.id }}/" method="POST">
@@ -21,5 +35,6 @@
         <button class="btn btn-success btn-lg">Add to Cart</button>
     </form>
     {% endif %}
+
 
 {% endblock %}

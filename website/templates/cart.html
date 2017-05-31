@@ -34,6 +34,7 @@
         </tr> 
 
       </table>
+
       {% if user.is_authenticated %}
       <form action="/checkout/{{ orderid }}/" method="POST">
         <input type="hidden" name="total" value="{{ total }}">
@@ -47,7 +48,8 @@
       <form action="{% url 'website:final_order_view' %}" method="POST">
         <input type="hidden" name="order_id" value="{{ orderid }}">
       {% csrf_token %}
-        <button class="btn btn-danger btn-md">Cancel Order</button> 
+
+        <button class="btn btn-warning btn-md">Cancel Order</button> 
       </form>
       {% endif %}
 

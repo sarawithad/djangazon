@@ -12,7 +12,9 @@ from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
 from website.models import Order, ProductOrder
+
 # standard Django view: query, template name, and a render method to render the data from the query into the template
+
 
 
 def index(request):
@@ -274,6 +276,20 @@ def delete_payment_type(request):
 
 
 @login_required(login_url='/login')
+def user_products(request):
+    """
+    Purpose: To retrieve a list og all products for sale by a user
+    Author: Max Baldridge
+    Args: request -- the full HTTP request object
+    Returns: list of products sold by the current user
+    """
+
+    user_products = Product.objects.all().filter(seller = request.user)
+    template_name = 'user_products.html'
+    return render(request, template_name, {'user_products': user_products})
+
+
+@login_required(login_url='/login')
 def add_product_to_order(request, product_id):
     """
     Purpose: To add a product (by the product id) to the ProductOrder table.
@@ -290,7 +306,10 @@ def add_product_to_order(request, product_id):
         customer = request.user
         new_order = Order.objects.create(customer=customer, order_date=None, payment_type=None, active=1)
 
-    add_to_ProductOrder = ProductOrder.objects.create(product=product_to_add, order=new_order)
+    if product_to_add.quantity <= 0:
+        pass
+    elif product_to_add.quantity > 0:
+        add_to_ProductOrder = ProductOrder.objects.create(product=product_to_add, order=new_order)
 
     return HttpResponseRedirect('/cart')
 
@@ -350,13 +369,20 @@ def order_confirmation(request):
         payment_type_id = request.POST['payment_type_id']
         order_id = request.POST['order_id']
 
+        products_on_order = ProductOrder.objects.values_list('product', flat=True).filter(order=order_id)
+        for each_product in products_on_order:
+            prodid = Product.objects.get(pk=each_product)
+            prodid.quantity = prodid.quantity - 1
+            prodid.quantity_sold = prodid.quantity_sold + 1
+            prodid.save()
+
         completed_order = Order.objects.get(pk=order_id)
         completed_order.payment_type = PaymentType.objects.get(pk=payment_type_id)
         completed_order.active = False
         completed_order.order_date = datetime.now()
         completed_order.save()        
 
-        return render(request, 'order_confirmation.html' , {})
+        return render(request, 'order_confirmation.html' , {'products_on_order' : products_on_order})
         
 @login_required(login_url='/login')
 def delete_product_from_cart(request):
@@ -373,9 +399,7 @@ def delete_product_from_cart(request):
 
         ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
 
-
         return HttpResponseRedirect('/cart')
-
 
 def view_cancel_order(request):
     """
@@ -387,8 +411,8 @@ def view_cancel_order(request):
     deleted_order = request.POST.get('order_id')
     Order.objects.get(id=deleted_order).delete()
 
-
     return render(request, 'final_order_view.html' , {})
+
 
 def view_order_detail(request, order_id):
     """
@@ -408,9 +432,5 @@ def view_order_detail(request, order_id):
     template_name = 'order_detail.html'
     order = get_object_or_404(Order, pk=order_id)            
     return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
-
-
-
-
 
 
