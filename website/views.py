@@ -430,10 +430,9 @@ def search(request):
     if query:
         products = all_products.filter(
             Q(title__contains=query)).distinct()
+        return render(request, 'query_results.html', {'search': products})
     
-    template_name = 'query_results.html'
-    
-    return render(request, template_name, {'search': products})
+    return render(request, 'query_results.html', {})
 
 
 def view_order_detail(request, order_id):
