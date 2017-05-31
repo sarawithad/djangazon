@@ -16,7 +16,7 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('title', 'description', 'price', 'quantity', 'product_type', 'product_photo',)
+        fields = ('title', 'description', 'price', 'quantity', 'product_type', 'product_photo', 'city',)
 
 class PaymentTypeForm(forms.ModelForm):
 
