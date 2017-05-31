@@ -237,15 +237,18 @@ def add_payment_type(request):
         return render(request, template_name, {'payment_type_form': payment_type_form})
 
     elif request.method == 'POST':
-        form_data = request.POST
-        pmt = PaymentType(
-            customer = request.user,
-            payment_type_name = form_data['payment_type_name'],
-            account_number = form_data['account_number'],
-        )
-        pmt.save()
-        template_name = 'payment_type_success.html'
-        return render(request, template_name, {})
+        try:
+            form_data = request.POST
+            pmt = PaymentType(
+                customer = request.user,
+                payment_type_name = form_data['payment_type_name'],
+                account_number = form_data['account_number'],
+            )
+            pmt.save()
+            template_name = 'payment_type_success.html'
+            return render(request, template_name, {})
+        except OverflowError:
+             return HttpResponse('Credit Card Number too Large')
 
 
 @login_required(login_url='/login')

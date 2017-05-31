@@ -12,6 +12,8 @@
 		<p><strong>Order History:</strong></p>
 		{% for order in past_orders %}
 			<button class="btn btn-default"><a href="{% url 'website:order_detail' order.id %}">#{{order.id}}</a></button>
+		{% empty %}
+		No Orders have been placed for this customer.
 		{% endfor %}
 	{% endif %}
 
