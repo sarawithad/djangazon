@@ -399,9 +399,16 @@ def view_order_detail(request, order_id):
     """
 
     # will be similar code to the single product detail page
+    total = 0
+
+    products_in_cart = ProductOrder.objects.all().filter(order=order_id)
+
+    for each_item in products_in_cart:
+        total += each_item.product.price
+
     template_name = 'order_detail.html'
     order = get_object_or_404(Order, pk=order_id)            
-    return render(request, template_name, {"order": order})
+    return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
 
 
 

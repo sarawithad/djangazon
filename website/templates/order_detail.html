@@ -2,12 +2,25 @@
 
 {% block content %}
 
+	<h1>Your Order</h1>
+	<h4>Order ID: {{ order.id }}</h4>
 	<table>
 		<tr>
-		  <th><h4>Product Name</h4></th>
-		  <th><h4>Product Price</h4></th>
+		  <th><h4>Product</h4></th>
+		  <th><h4>Price</h4></th>
 		</tr>
-		
+		{% for product in products_in_cart %}
+		        <tr class="cart-line-item">
+		          <th> <a href="{% url 'website:single_product' product.product.id %}"> {{ product.product }} </a> </th>
+		          <th> ${{ product.product.price }} </th>
+		        </tr>
+		{% endfor %}
+	
+		<tr>
+		  <th>Total:</th>
+		  <th> ${{ total }}</th>
+		</tr> 
+
 	</table>
 
 

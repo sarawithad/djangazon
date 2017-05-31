@@ -11,7 +11,7 @@
 		<p><strong>Email:</strong></p>{{user.email}}
 		<p><strong>Order History:</strong></p>
 		{% for order in past_orders %}
-			<p><a href="{% url 'website:order_detail' order.id %}">{{order.id}}</a></p>
+			<span><a href="{% url 'website:order_detail' order.id %}">#{{order.id}}</a></span>
 		{% endfor %}
 		<!-- hyperlink the order ids to an order_detail view -->
 	{% endif %}

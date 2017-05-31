@@ -34,7 +34,6 @@
         </tr> 
 
       </table>
-      {{ orderid }}
       {% if user.is_authenticated %}
       <form action="/checkout/{{ orderid }}/" method="POST">
         <input type="hidden" name="total" value="{{ total }}">
