@@ -420,10 +420,10 @@ def view_cancel_order(request):
 
 def search(request):
     """
-    Purpose: Search
+    Purpose: Search for a product by title using search bar in nav.
     Author: Aaron Barfoot
     Args: request -- the full HTTP request object
-    Returns: list of products matching search parameters entered by user
+    Returns: List of products matching search parameters entered by user.
     """
     all_products = Product.objects.all().order_by("title")
     query = request.GET.get("q")
