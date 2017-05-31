@@ -295,9 +295,24 @@ def delete_user_product(request):
     Purpose: Displays all of the authenticated user's products and allows the user to delete them
     Author: Max Baldridge
     Args: request -- the full HTTP request object
-    Returns render, Combines template_name with the given dictionary and passes th HttpResponse object
+    Returns: n/a 
     """
-    pass
+    print("hello world")
+    user_prod_to_delete = request.POST['product_id']
+
+    sold_user_prod = ProductOrder.objects.all().filter(product= user_prod_to_delete)
+
+    print(sold_user_prod)
+
+    if sold_user_prod:
+        print("fired")
+        return HttpResponse("You Didn't Say The Magic Word!")
+
+    elif not sold_user_prod:
+        print('what the fuck')
+        user_prod = Product.objects.get(pk=user_prod_to_delete).delete()
+        print("user_prod", user_prod)
+        return render(request, 'delete_user_product.html', {'delete_user_product': delete_user_product})
 
 
 @login_required(login_url='/login')
