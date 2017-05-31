@@ -15,3 +15,7 @@ hr {
 	padding: 20px;
 	border-bottom: 2px dotted black;
 }
+
+.nav .btn {
+	margin-right: 1px !important;
+}
