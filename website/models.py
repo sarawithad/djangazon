@@ -55,10 +55,8 @@ class Customer(models.Model):
     returns: (None): N/A
     """   
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.IntegerField()
-    # first_name = models.CharField(max_length=30)
-    # last_name = models.CharField(max_length=30)
-    # email_address = models.EmailField(max_length=30)
+    phone = models.IntegerField(blank=True, null=True)
+    street_address = models.CharField(max_length=255, blank=True, null=True)
 
 
 

@@ -1,0 +1,21 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+    <hr>
+    <h4>Account Information:</h4>
+
+    <form action="{% url 'website:edit_settings' user.id %}" method="POST">
+        {% csrf_token %}
+        <strong>Username:</strong><input type="text" name="username" value="{{customer.user.username}}"><br>
+        <strong>First Name:</strong><input type="text" name="first_name" value="{{customer.user.first_name}}"><br>
+        <strong>Last Name:</strong><input type="text" name="last_name" value="{{customer.user.last_name}}"><br>
+        <strong>Email:</strong><input type="text" name="email" value="{{customer.user.email}}"><br>
+        <strong>Phone:</strong><input type="text" name="phone" value="{{customer.phone}}"><br>
+        <strong>Street address:</strong><input type="text" name="street_address" value="{{customer.street_address}}"><br>
+    
+        <input type="submit" class="btn btn-success btn-small" value="Update" />
+    </form>
+
+{% endblock content %}
+

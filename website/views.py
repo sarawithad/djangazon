@@ -7,11 +7,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
 from datetime import datetime
 
-from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
+from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm, NewCustomerForm
 from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
-from website.models import Order, ProductOrder
+from website.models import Order, ProductOrder, Customer
 
 # standard Django view: query, template name, and a render method to render the data from the query into the template
 
@@ -43,7 +43,8 @@ def register(request):
     # Create a new user by invoking the `create_user` helper method
     # on Django's built-in User model
     if request.method == 'POST':
-        user_form = UserForm(data=request.POST)
+        user_form = NewCustomerForm(data=request.POST)
+        data = request.POST
 
         if user_form.is_valid():
             # Save the user's form data to the database.
@@ -57,12 +58,18 @@ def register(request):
             # Update our variable to tell the template registration was successful.
             registered = True
 
-        return login_user(request)
+            new_customer = Customer.objects.create(user=user)
+
+            return login_user(request)
+
+        return render(request, template_name, {'user_form': user_form})
 
     elif request.method == 'GET':
-        user_form = UserForm()
+        user_form = NewCustomerForm()
         template_name = 'register.html'
         return render(request, template_name, {'user_form': user_form})
+
+
 
 
 def login_user(request):
@@ -432,5 +439,29 @@ def view_order_detail(request, order_id):
     template_name = 'order_detail.html'
     order = get_object_or_404(Order, pk=order_id)            
     return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
+
+
+def update_profile(request):
+    args = {}
+
+    if request.method == 'POST':
+        update_form = NewCustomerForm(request.POST, instance=request.user)
+        if update_form.is_valid():
+            update_form.save()
+            return HttpResponseRedirect(reverse('profile.html'))
+    else:
+        current_customer = Customer.objects.get(user=request.user)
+        return render(request, 'edit_settings.html', {'current_customer': current_customer})
+
+
+
+
+
+
+
+
+
+
+
 
 

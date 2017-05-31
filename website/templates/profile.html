@@ -5,10 +5,12 @@
 	<hr>
 	{% if user.is_authenticated %}
 		<h4>Account Information:</h4>
-		<p><strong>Username:</strong></p>{{user.username}}
-		<p><strong>First Name:</strong></p>{{user.first_name}}
-		<p><strong>Last Name:</strong></p>{{user.last_name}}
-		<p><strong>Email:</strong></p>{{user.email}}
+		<p><strong>Username:</strong></p>{{customer.user.username}}
+		<p><strong>First Name:</strong></p>{{customer.user.first_name}}
+		<p><strong>Last Name:</strong></p>{{customer.user.last_name}}
+		<p><strong>Email:</strong></p>{{customer.user.email}}
+		<p><strong>Phone number:</strong></p>{{customer.phone}}
+		<p><strong>Street address:</strong></p>{{customer.street_address}}
 		<p><strong>Order History:</strong></p>
 		{% for order in past_orders %}
 			<button class="btn btn-default"><a href="{% url 'website:order_detail' order.id %}">#{{order.id}}</a></button>
@@ -19,5 +21,13 @@
 	<hr>
 	<a class="btn btn-success" href="add_payment_type">Add a Payment Type</a>
 	<a class="btn btn-success" href="user_payment_types">View Your Payment Types</a>
+
+	<form id="update_form" method="post" action="{% url 'website:edit_settings' %}"
+                enctype="multipart/form-data">
+
+            {% csrf_token %}
+            {{ user_form.as_p }}
+	<button class="btn btn-success" type="submit">Update Profile</button>
+	</form>
 
 {% endblock %}
