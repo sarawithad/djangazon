@@ -297,21 +297,15 @@ def delete_user_product(request):
     Args: request -- the full HTTP request object
     Returns: n/a 
     """
-    print("hello world")
-    user_prod_to_delete = request.POST['product_id']
 
+    user_prod_to_delete = request.POST['product_id']
     sold_user_prod = ProductOrder.objects.all().filter(product= user_prod_to_delete)
 
-    print(sold_user_prod)
-
     if sold_user_prod:
-        print("fired")
         return HttpResponse("You Didn't Say The Magic Word!")
 
     elif not sold_user_prod:
-        print('what the fuck')
         user_prod = Product.objects.get(pk=user_prod_to_delete).delete()
-        print("user_prod", user_prod)
         return render(request, 'delete_user_product.html', {'delete_user_product': delete_user_product})
 
 
