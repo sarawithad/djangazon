@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
+from django.core.exceptions import MultipleObjectsReturned
 from datetime import datetime
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
@@ -212,7 +213,7 @@ def profile(request):
     """
 
     try:
-        past_orders = Order.objects.all().filter(customer=request.user)
+        past_orders = Order.objects.all().filter(customer=request.user, active=0)
     except: 
         alert('There is no Order History for this customer.')
 
@@ -399,7 +400,10 @@ def delete_product_from_cart(request):
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
 
-        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
+        try:
+            ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
+        except MultipleObjectsReturned:
+            multiple_products = ProductOrder.objects.all().filter(product=deleted_product, order=order_for_deletion).delete()
 
         return HttpResponseRedirect('/cart')
 
