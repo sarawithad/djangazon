@@ -16,10 +16,10 @@
 
             <li>Products Sold: {{ product.quantity_sold }}</li>
             <li>Inventory Remaining: {{ product.quantity }}</li>
-            <form id="login_form" method="post" action="{% url 'website:user_products' %}">
+            <form method="post" action="{% url 'website:delete_user_product' %}">
               {% csrf_token %}
                 <input name="product_id" type="hidden" value="{{ product.id }}"/>
-                <input class="btn btn-danger" type="submit" value="Delete Product"/>
+                <input class="btn btn-danger btn-sm" type="submit" value="Delete Product"/>
             </form>
             <br>
         {% empty %}
