@@ -32,13 +32,13 @@ class UserForm(forms.ModelForm):
 #         self.fields['user']=forms.ModelChoiceField(queryset=User.objects.all())
 
 
-class NewCustomerForm(forms.ModelForm):
+# class NewCustomerForm(forms.ModelForm):
 
-    password = forms.CharField(widget=forms.PasswordInput())
+#     password = forms.CharField(widget=forms.PasswordInput())
 
-    class Meta:
-        model = Customer
-        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'phone', 'street_address')
+#     class Meta:
+#         model = Customer
+#         fields = ('username', 'first_name', 'last_name', 'email', 'password', 'phone', 'street_address')
 
 
 class ProductForm(forms.ModelForm): 

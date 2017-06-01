@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
 from datetime import datetime
 
-from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm, NewCustomerForm
+from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
 from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
@@ -33,7 +33,6 @@ def index(request):
 
 def register(request):
     """Handles the creation of a new user for authentication
-
     Method arguments:
       request -- The full HTTP request object
     """
@@ -45,8 +44,7 @@ def register(request):
     # Create a new user by invoking the `create_user` helper method
     # on Django's built-in User model
     if request.method == 'POST':
-        user_form = NewCustomerForm(data=request.POST)
-        data = request.POST
+        user_form = UserForm(data=request.POST)
 
         if user_form.is_valid():
             # Save the user's form data to the database.
@@ -57,19 +55,59 @@ def register(request):
             user.set_password(user.password)
             user.save()
 
+            customer = Customer(user_id=user.id)
+            customer.save()
+
             # Update our variable to tell the template registration was successful.
             registered = True
 
-            new_customer = Customer.objects.create(user=user)
-
-            return login_user(request)
-
-        return render(request, template_name, {'user_form': user_form})
+        return login_user(request)
 
     elif request.method == 'GET':
-        user_form = NewCustomerForm()
+        user_form = UserForm()
         template_name = 'register.html'
         return render(request, template_name, {'user_form': user_form})
+
+
+# def register(request):
+#     """Handles the creation of a new user for authentication
+
+#     Method arguments:
+#       request -- The full HTTP request object
+#     """
+
+#     # A boolean value for telling the template whether the registration was successful.
+#     # Set to False initially. Code changes value to True when registration succeeds.
+#     registered = False
+
+#     # Create a new user by invoking the `create_user` helper method
+#     # on Django's built-in User model
+#     if request.method == 'POST':
+#         user_form = NewCustomerForm(data=request.POST)
+#         data = request.POST
+
+#         if user_form.is_valid():
+#             # Save the user's form data to the database.
+#             user = user_form.save()
+
+#             # Now we hash the password with the set_password method.
+#             # Once hashed, we can update the user object.
+#             user.set_password(user.password)
+#             user.save()
+
+#             # Update our variable to tell the template registration was successful.
+#             registered = True
+
+#             new_customer = Customer.objects.create(user=user)
+
+#             return login_user(request)
+
+#         return render(request, template_name, {'user_form': user_form})
+
+#     elif request.method == 'GET':
+#         user_form = NewCustomerForm()
+#         template_name = 'register.html'
+#         return render(request, template_name, {'user_form': user_form})
 
 
 
@@ -464,16 +502,23 @@ def view_order_detail(request, order_id):
 
 
 def update_profile(request):
-    args = {}
 
     if request.method == 'POST':
-        update_form = NewCustomerForm(request.POST, instance=request.user)
-        if update_form.is_valid():
-            update_form.save()
-            return HttpResponseRedirect(reverse('profile.html'))
-    else:
-        current_customer = Customer.objects.get(user=request.user)
-        return render(request, 'edit_settings.html', {'current_customer': current_customer})
+        customer_data = request.POST
+        current_user = request.user
+        current_user.first = current_user.first_name
+        current_user.last = current_user.last_name
+        current_user.save()
+        customer = Customer.objects.get(user_id=current_user.id)
+        context = {'customer': customer}
+        template_name = 'edit_settings.html'
+        return render(request, template_name, context)
 
+    else:
+        current_user = request.user
+        customer = Customer.objects.get(pk=current_user.id)
+        context = {'customer': customer}
+        template_name = 'edit_settings.html'
+        return render(request, template_name, context)
 
 
