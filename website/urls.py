@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^add_payment_type$', views.add_payment_type, name='add_payment_type'),
     url(r'^user_payment_types$', views.user_payment_types, name='user_payment_types'),
     url(r'^user_products$', views.user_products, name='user_products'),
+    url(r'^delete_user_product$', views.delete_user_product, name='delete_user_product'),
     url(r'^delete_payment_type$', views.delete_payment_type, name='delete_payment_type'),
     url(r'^add_to_cart/(?P<product_id>[0-9]+)/$', views.add_product_to_order, name='add_product_to_order'),
     url(r'^cart$', views.view_cart, name='cart'),

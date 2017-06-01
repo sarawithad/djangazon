@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
+from django.core.exceptions import MultipleObjectsReturned
 from datetime import datetime
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
@@ -215,7 +216,7 @@ def profile(request):
     """
 
     try:
-        past_orders = Order.objects.all().filter(customer=request.user)
+        past_orders = Order.objects.all().filter(customer=request.user, active=0)
     except: 
         alert('There is no Order History for this customer.')
     current_user = request.user
@@ -239,15 +240,18 @@ def add_payment_type(request):
         return render(request, template_name, {'payment_type_form': payment_type_form})
 
     elif request.method == 'POST':
-        form_data = request.POST
-        pmt = PaymentType(
-            customer = request.user,
-            payment_type_name = form_data['payment_type_name'],
-            account_number = form_data['account_number'],
-        )
-        pmt.save()
-        template_name = 'payment_type_success.html'
-        return render(request, template_name, {})
+        try:
+            form_data = request.POST
+            pmt = PaymentType(
+                customer = request.user,
+                payment_type_name = form_data['payment_type_name'],
+                account_number = form_data['account_number'],
+            )
+            pmt.save()
+            template_name = 'payment_type_success.html'
+            return render(request, template_name, {})
+        except OverflowError:
+             return HttpResponse('Credit Card Number too Large')
 
 
 @login_required(login_url='/login')
@@ -285,7 +289,7 @@ def delete_payment_type(request):
 @login_required(login_url='/login')
 def user_products(request):
     """
-    Purpose: To retrieve a list og all products for sale by a user
+    Purpose: To retrieve a list of all products for sale by a user
     Author: Max Baldridge
     Args: request -- the full HTTP request object
     Returns: list of products sold by the current user
@@ -294,6 +298,26 @@ def user_products(request):
     user_products = Product.objects.all().filter(seller = request.user)
     template_name = 'user_products.html'
     return render(request, template_name, {'user_products': user_products})
+
+
+@login_required(login_url='/login')
+def delete_user_product(request):
+    """
+    Purpose: Displays all of the authenticated user's products and allows the user to delete them
+    Author: Max Baldridge
+    Args: request -- the full HTTP request object
+    Returns: n/a 
+    """
+
+    user_prod_to_delete = request.POST['product_id']
+    sold_user_prod = ProductOrder.objects.all().filter(product= user_prod_to_delete)
+
+    if sold_user_prod:
+        return HttpResponse("You Didn't Say The Magic Word!")
+
+    elif not sold_user_prod:
+        user_prod = Product.objects.get(pk=user_prod_to_delete).delete()
+        return render(request, 'delete_user_product.html', {'delete_user_product': delete_user_product})
 
 
 @login_required(login_url='/login')
@@ -403,8 +427,12 @@ def delete_product_from_cart(request):
     if request.method == 'POST':
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
+        the_id = request.POST['the_id']
 
-        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
+        try:
+            ProductOrder.objects.get(product=deleted_product, order=order_for_deletion, pk=the_id).delete()
+        except MultipleObjectsReturned:
+            multiple_products = ProductOrder.objects.all().filter(product=deleted_product, order=order_for_deletion).delete()
 
         return HttpResponseRedirect('/cart')
 
