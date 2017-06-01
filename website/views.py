@@ -425,9 +425,10 @@ def delete_product_from_cart(request):
     if request.method == 'POST':
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
+        the_id = request.POST['the_id']
 
         try:
-            ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
+            ProductOrder.objects.get(product=deleted_product, order=order_for_deletion, pk=the_id).delete()
         except MultipleObjectsReturned:
             multiple_products = ProductOrder.objects.all().filter(product=deleted_product, order=order_for_deletion).delete()
 
