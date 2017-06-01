@@ -283,7 +283,7 @@ def delete_payment_type(request):
 @login_required(login_url='/login')
 def user_products(request):
     """
-    Purpose: To retrieve a list og all products for sale by a user
+    Purpose: To retrieve a list of all products for sale by a user
     Author: Max Baldridge
     Args: request -- the full HTTP request object
     Returns: list of products sold by the current user
@@ -292,6 +292,26 @@ def user_products(request):
     user_products = Product.objects.all().filter(seller = request.user)
     template_name = 'user_products.html'
     return render(request, template_name, {'user_products': user_products})
+
+
+@login_required(login_url='/login')
+def delete_user_product(request):
+    """
+    Purpose: Displays all of the authenticated user's products and allows the user to delete them
+    Author: Max Baldridge
+    Args: request -- the full HTTP request object
+    Returns: n/a 
+    """
+
+    user_prod_to_delete = request.POST['product_id']
+    sold_user_prod = ProductOrder.objects.all().filter(product= user_prod_to_delete)
+
+    if sold_user_prod:
+        return HttpResponse("You Didn't Say The Magic Word!")
+
+    elif not sold_user_prod:
+        user_prod = Product.objects.get(pk=user_prod_to_delete).delete()
+        return render(request, 'delete_user_product.html', {'delete_user_product': delete_user_product})
 
 
 @login_required(login_url='/login')

@@ -4,22 +4,29 @@
 
 {% load staticfiles %}
 
-    <h3> {{ user.username}} Products</h3>
+    <h3> <a href="/profile"><u>{{ user.username}}'s</u></a> Products</h3>
 
 
 	<ul>
-	    {% if user.is_authenticated %}
-		{% for product in user_products %}
-		    <li>Product: <a href="{% url 'website:single_product' product.id %}">{{ product.title }}</a></li> 
-		    <li>Description: {{ product.description }}</li>
-		    <li>Type: {{ product.product_type }}</li>
-		    <li>Cost: {{ product.price }}
-		    <li>Inventory: {{ product.quantity }} - Products Sold: {{ product.quantity_sold }}</li>
-		    <br />
-		{% empty %}
-		    
-	    {% endfor %}
-	</ul>
+
+        {% if user.is_authenticated %}
+        {% for product in user_products %}
+            <h4><u>Product: <a href="{% url 'website:single_product' product.id %}">{{ product.title }}</u></h4></a> 
+            <li>Cost: {{ product.price }}
+            <br>
+
+            <li>Products Sold: {{ product.quantity_sold }}</li>
+            <li>Inventory Remaining: {{ product.quantity }}</li>
+            <form method="post" action="{% url 'website:delete_user_product' %}">
+              {% csrf_token %}
+                <input name="product_id" type="hidden" value="{{ product.id }}"/>
+                <input class="btn btn-danger btn-sm" type="submit" value="Delete Product"/>
+            </form>
+            <br>
+        {% empty %}
+            
+        {% endfor %}
+    </ul>     
 
 	    	<a class="btn btn-default" href="/sell">Sell Another Product</a>
 
