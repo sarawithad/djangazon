@@ -33,6 +33,18 @@
     </ul>
     
   {% if user.is_authenticated %}
+      <form action="?" method="post">
+        {% csrf_token %}
+        <input type="hidden" value="{{ product.id }}">
+        <input class="btn btn-success btn-sm" type="submit" value="Like">
+      </form>
+
+      <form action="?" method="post" value="{{ product.id }}">
+        {% csrf_token %}
+        <input type="hidden" value="{{ product.id }}">
+        <input class="btn btn-danger btn-sm" type="submit" value="Dislike">
+      </form>
+
       {% if product.quantity > 0 %}
       <form action="/add_to_cart/{{ product.id }}/" method="POST">
       <hr>

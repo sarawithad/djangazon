@@ -123,3 +123,22 @@ class ProductOrder(models.Model):
 
     def __str__(self):
         return self.product.title
+
+
+
+class ProductOpinion(models.Model):
+    """
+    purpose: Store product likes and dislikes
+    author: Aaron Barfoot
+    args: 
+    returns: (None): N/A
+    """
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    opinion = models.IntegerField(default=0)
+
+
+
+
+
+
