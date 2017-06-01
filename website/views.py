@@ -178,9 +178,10 @@ def single_product(request, product_id):
             product = Product.objects.get(pk=product_id)
             user = User.objects.get(pk=current_customer)
 
-            liked_product = ProductOpinion.objects.create(product=product, customer=user ,opinion=like)
-            print(liked_product)
-                
+            liked_product = ProductOpinion.objects.get_or_create(product=product, customer=user ,opinion=like)
+            print('the liked_product object', liked_product)
+            
+            return HttpResponseRedirect('/')
             # get_or_create returns a tuple of info
         elif request.POST['dislike']:
             print("dislike")
