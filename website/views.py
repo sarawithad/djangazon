@@ -17,8 +17,6 @@ from django.db.models import Q
 
 # standard Django view: query, template name, and a render method to render the data from the query into the template
 
-
-
 def index(request):
     """
     Purpose: renders the index page with a list of 20 (mpax)  products
@@ -55,6 +53,7 @@ def register(request):
             user.set_password(user.password)
             user.save()
 
+            #Saves customer once user created
             customer = Customer(user_id=user.id)
             customer.save()
 
@@ -67,50 +66,6 @@ def register(request):
         user_form = UserForm()
         template_name = 'register.html'
         return render(request, template_name, {'user_form': user_form})
-
-
-# def register(request):
-#     """Handles the creation of a new user for authentication
-
-#     Method arguments:
-#       request -- The full HTTP request object
-#     """
-
-#     # A boolean value for telling the template whether the registration was successful.
-#     # Set to False initially. Code changes value to True when registration succeeds.
-#     registered = False
-
-#     # Create a new user by invoking the `create_user` helper method
-#     # on Django's built-in User model
-#     if request.method == 'POST':
-#         user_form = NewCustomerForm(data=request.POST)
-#         data = request.POST
-
-#         if user_form.is_valid():
-#             # Save the user's form data to the database.
-#             user = user_form.save()
-
-#             # Now we hash the password with the set_password method.
-#             # Once hashed, we can update the user object.
-#             user.set_password(user.password)
-#             user.save()
-
-#             # Update our variable to tell the template registration was successful.
-#             registered = True
-
-#             new_customer = Customer.objects.create(user=user)
-
-#             return login_user(request)
-
-#         return render(request, template_name, {'user_form': user_form})
-
-#     elif request.method == 'GET':
-#         user_form = NewCustomerForm()
-#         template_name = 'register.html'
-#         return render(request, template_name, {'user_form': user_form})
-
-
-
 
 def login_user(request):
     '''Handles the creation of a new user for authentication
@@ -504,7 +459,12 @@ def view_order_detail(request, order_id):
 
 
 def update_profile(request):
-
+    """
+    Purpose: to update customer's profile settings
+    Author: Dara Thomas
+    Args: request -- the full HTTP request object, order_id - the id of the order 
+    Returns: a view of customer's current profile details with option to edit and save them
+    """
     if request.method == 'POST':
         customer_data = request.POST
         current_user = request.user
