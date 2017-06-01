@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
+from django.core.exceptions import MultipleObjectsReturned
 from datetime import datetime
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
@@ -215,7 +216,7 @@ def profile(request):
     """
 
     try:
-        past_orders = Order.objects.all().filter(customer=request.user)
+        past_orders = Order.objects.all().filter(customer=request.user, active=0)
     except: 
         alert('There is no Order History for this customer.')
 
@@ -237,15 +238,18 @@ def add_payment_type(request):
         return render(request, template_name, {'payment_type_form': payment_type_form})
 
     elif request.method == 'POST':
-        form_data = request.POST
-        pmt = PaymentType(
-            customer = request.user,
-            payment_type_name = form_data['payment_type_name'],
-            account_number = form_data['account_number'],
-        )
-        pmt.save()
-        template_name = 'payment_type_success.html'
-        return render(request, template_name, {})
+        try:
+            form_data = request.POST
+            pmt = PaymentType(
+                customer = request.user,
+                payment_type_name = form_data['payment_type_name'],
+                account_number = form_data['account_number'],
+            )
+            pmt.save()
+            template_name = 'payment_type_success.html'
+            return render(request, template_name, {})
+        except OverflowError:
+             return HttpResponse('Credit Card Number too Large')
 
 
 @login_required(login_url='/login')
@@ -422,7 +426,10 @@ def delete_product_from_cart(request):
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
 
-        ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
+        try:
+            ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
+        except MultipleObjectsReturned:
+            multiple_products = ProductOrder.objects.all().filter(product=deleted_product, order=order_for_deletion).delete()
 
         return HttpResponseRedirect('/cart')
 
