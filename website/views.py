@@ -468,8 +468,6 @@ def update_profile(request):
     if request.method == 'POST':
         customer_data = request.POST
         current_user = request.user
-        print(customer_data)
-        print(current_user)
         current_user.first_name = customer_data['first_name']
         current_user.last_name = customer_data['last_name']
         current_user.save()
