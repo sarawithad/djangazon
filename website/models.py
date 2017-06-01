@@ -130,10 +130,10 @@ class ProductOpinion(models.Model):
     """
     purpose: Store product likes and dislikes
     author: Aaron Barfoot
-    args: 
+    args: extends the imported Django model class 
     returns: (None): N/A
     """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.OneToOneField(Product, on_delete=models.CASCADE)
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
     opinion = models.IntegerField(default=0)
 

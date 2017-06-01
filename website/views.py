@@ -12,6 +12,8 @@ from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
 from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
+from website.models import ProductOpinion
+from website.models import Customer
 from website.models import Order, ProductOrder
 
 from django.db.models import Q
@@ -158,17 +160,37 @@ def list_products(request):
 
 def single_product(request, product_id):
     """
-    purpose: Allows user to view product_detail view, which contains a very specific view
+    Purpose: Allows user to view product_detail view, which contains a very specific view
         for a singular product
         For an example, visit /product_details/1/ to see a view on the first product created
         displaying title, description, quantity, price/unit, and "Add to order" button
-    author: Max Baldridge
-    args: product_id: (integer): id of product we are viewing 
-    returns: (render): a view of the request, template to use, and product obj
-    """        
-    template_name = 'single.html'
-    product = get_object_or_404(Product, pk=product_id)            
-    return render(request, template_name, {"product": product})
+    Author: Max Baldridge
+    Args: product_id: (integer): id of product we are viewing 
+    Returns: (render): a view of the request, template to use, and product obj
+    """
+    if request.method == 'POST':
+        current_customer = request.user.id
+        # product_id_number = int(product_id)
+        # print(product_id_number)
+
+        if request.POST['like']:
+            like = request.POST['like']
+            # print(like)
+            product = Product.objects.get(pk=product_id)
+            user = Customer.objects.get(pk=current_customer)
+
+            liked_product = ProductOpinion.objects.create(product=product, customer=current_customer ,opinion=like)
+            print(liked_product)
+                
+            # get_or_create returns a tuple of info
+        elif request.POST['dislike']:
+            print("dislike")
+            print(product_id)
+
+    elif request.method == 'GET':
+        template_name = 'single.html'
+        product = get_object_or_404(Product, pk=product_id)            
+        return render(request, template_name, {"product": product})
 
 
 def list_product_types(request):
@@ -481,6 +503,37 @@ def view_order_detail(request, order_id):
     template_name = 'order_detail.html'
     order = get_object_or_404(Order, pk=order_id)            
     return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
+
+def opinion(request, product_id):
+    """
+    Purpose: to post the user's 'like' or 'dislike' of a product to the database
+    Author: Illegal Team
+    Args: request -- the full HTTP request object, product_id - the id of the product the user interacts with
+    Returns: updated table in the database
+    """
+
+    if request.POST['like']:
+        print(like)
+
+    elif request.POST['dislike']:
+        print(dislike)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
