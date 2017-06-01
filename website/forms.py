@@ -3,6 +3,7 @@ from django import forms
 from website.models import Product
 from website.models import PaymentType
 from website.models import Order
+from website.models import Customer
 
 
 class UserForm(forms.ModelForm):
@@ -10,7 +11,7 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'first_name', 'last_name',)
+        fields = ('username', 'email', 'password', 'first_name', 'last_name')
 
 class ProductForm(forms.ModelForm): 
 

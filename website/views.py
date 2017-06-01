@@ -13,14 +13,11 @@ from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
 from website.models import ProductOpinion
-from website.models import Customer
-from website.models import Order, ProductOrder
+from website.models import Order, ProductOrder, Customer, User
 
 from django.db.models import Q
 
 # standard Django view: query, template name, and a render method to render the data from the query into the template
-
-
 
 def index(request):
     """
@@ -36,7 +33,6 @@ def index(request):
 
 def register(request):
     """Handles the creation of a new user for authentication
-
     Method arguments:
       request -- The full HTTP request object
     """
@@ -59,6 +55,10 @@ def register(request):
             user.set_password(user.password)
             user.save()
 
+            #Saves customer once user created
+            customer = Customer(user_id=user.id)
+            customer.save()
+
             # Update our variable to tell the template registration was successful.
             registered = True
 
@@ -68,7 +68,6 @@ def register(request):
         user_form = UserForm()
         template_name = 'register.html'
         return render(request, template_name, {'user_form': user_form})
-
 
 def login_user(request):
     '''Handles the creation of a new user for authentication
@@ -177,9 +176,9 @@ def single_product(request, product_id):
             like = request.POST['like']
             # print(like)
             product = Product.objects.get(pk=product_id)
-            user = Customer.objects.get(pk=current_customer)
+            user = User.objects.get(pk=current_customer)
 
-            liked_product = ProductOpinion.objects.create(product=product, customer=current_customer ,opinion=like)
+            liked_product = ProductOpinion.objects.create(product=product, customer=user ,opinion=like)
             print(liked_product)
                 
             # get_or_create returns a tuple of info
@@ -241,9 +240,11 @@ def profile(request):
         past_orders = Order.objects.all().filter(customer=request.user, active=0)
     except: 
         alert('There is no Order History for this customer.')
+    current_user = request.user
+    customer = Customer.objects.get(user_id=current_user.id)
 
     template_name = 'profile.html'
-    return render(request, template_name, {'past_orders': past_orders})
+    return render(request, template_name, {'past_orders': past_orders, 'customer': customer})
 
 
 @login_required(login_url='/login')
@@ -447,9 +448,10 @@ def delete_product_from_cart(request):
     if request.method == 'POST':
         deleted_product = request.POST['product_id']
         order_for_deletion = request.POST['order_id']
+        the_id = request.POST['the_id']
 
         try:
-            ProductOrder.objects.get(product=deleted_product, order=order_for_deletion).delete()
+            ProductOrder.objects.get(product=deleted_product, order=order_for_deletion, pk=the_id).delete()
         except MultipleObjectsReturned:
             multiple_products = ProductOrder.objects.all().filter(product=deleted_product, order=order_for_deletion).delete()
 
@@ -535,5 +537,31 @@ def opinion(request, product_id):
 
 
 
+
+def update_profile(request):
+    """
+    Purpose: to update customer's profile settings
+    Author: Dara Thomas
+    Args: request -- the full HTTP request object, order_id - the id of the order 
+    Returns: a view of customer's current profile details with option to edit and save them
+    """
+    if request.method == 'POST':
+        customer_data = request.POST
+        current_user = request.user
+        current_user.first_name = customer_data['first_name']
+        current_user.last_name = customer_data['last_name']
+        current_user.save()
+        customer = Customer.objects.get(user_id=current_user.id)
+        customer.phone = customer_data['phone']
+        customer.street_address = customer_data['street_address']
+        customer.save()
+        return HttpResponseRedirect('/profile')
+
+    else:
+        current_user = request.user
+        customer = Customer.objects.get(user_id=current_user.id)
+        context = {'customer': customer}
+        template_name = 'edit_settings.html'
+        return render(request, template_name, context)
 
 

@@ -19,6 +19,7 @@
             {% if user.is_authenticated %} 
             <form action="{% url 'website:delete_product_from_cart' %}" method="POST">
             {% csrf_token %}
+              <input type="hidden" name="the_id" value="{{ product.id }}">
               <input type="hidden" name="product_id" value="{{ product.product_id }}">
               <input type="hidden" name="order_id" value="{{ product.order_id }}">
               <button class="btn btn-danger btn-sm">Delete from Cart </button>

@@ -48,7 +48,6 @@ class Product(models.Model):
         return "/single_product/{}".format(self.id)
 
 
-# this is unnecessary and we don't need it, we should just look to the profile class that already has a one to one connection with the django user
 class Customer(models.Model):
     """
     purpose: Instantiates a customer
@@ -57,10 +56,8 @@ class Customer(models.Model):
     returns: (None): N/A
     """   
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = models.IntegerField()
-    # first_name = models.CharField(max_length=30)
-    # last_name = models.CharField(max_length=30)
-    # email_address = models.EmailField(max_length=30)
+    phone = models.IntegerField(default=0, blank=True, null=True)
+    street_address = models.CharField(max_length=255, blank=True, null=True)
 
 
 
@@ -134,7 +131,7 @@ class ProductOpinion(models.Model):
     returns: (None): N/A
     """
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.OneToOneField(User, on_delete=models.CASCADE)
     opinion = models.IntegerField(default=0)
 
 
