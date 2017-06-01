@@ -263,9 +263,11 @@ def profile(request):
         past_orders = Order.objects.all().filter(customer=request.user)
     except: 
         alert('There is no Order History for this customer.')
+    current_user = request.user
+    customer = Customer.objects.get(user_id=current_user.id)
 
     template_name = 'profile.html'
-    return render(request, template_name, {'past_orders': past_orders})
+    return render(request, template_name, {'past_orders': past_orders, 'customer': customer})
 
 
 @login_required(login_url='/login')
@@ -506,17 +508,20 @@ def update_profile(request):
     if request.method == 'POST':
         customer_data = request.POST
         current_user = request.user
-        current_user.first = current_user.first_name
-        current_user.last = current_user.last_name
+        print(customer_data)
+        print(current_user)
+        current_user.first_name = customer_data['first_name']
+        current_user.last_name = customer_data['last_name']
         current_user.save()
         customer = Customer.objects.get(user_id=current_user.id)
-        context = {'customer': customer}
-        template_name = 'edit_settings.html'
-        return render(request, template_name, context)
+        customer.phone = customer_data['phone']
+        customer.street_address = customer_data['street_address']
+        customer.save()
+        return HttpResponseRedirect('/profile')
 
     else:
         current_user = request.user
-        customer = Customer.objects.get(pk=current_user.id)
+        customer = Customer.objects.get(user_id=current_user.id)
         context = {'customer': customer}
         template_name = 'edit_settings.html'
         return render(request, template_name, context)

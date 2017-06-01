@@ -5,7 +5,7 @@
     <hr>
     <h4>Account Information:</h4>
     <br>
-    <form action="{% url 'website:edit_settings' %}" method="POST">
+    <form action="{% url 'website:edit_settings' %}" method="post">
         {% csrf_token %}
         <h5>First Name:</h5><input type="text" name="first_name" value="{{customer.user.first_name}}"><br>
         <h5>Last Name:</h5><input type="text" name="last_name" value="{{customer.user.last_name}}"><br>
@@ -14,6 +14,8 @@
         <h5>Street address:</h5><input type="text" name="street_address" value="{{customer.street_address}}"><br><br>
         <input type="submit" class="btn btn-success btn-small" value="Update" />
     </form>
+
+    <a href="{% url 'website:profile' %}">View Profile</a>
 
 {% endblock content %}
 
