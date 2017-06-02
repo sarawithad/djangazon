@@ -6,6 +6,7 @@ from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
 from django.core.exceptions import MultipleObjectsReturned
+from django.contrib.auth.models import User
 from datetime import datetime
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
@@ -13,7 +14,7 @@ from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
 from website.models import ProductOpinion
-from website.models import Order, ProductOrder, Customer, User
+from website.models import Order, ProductOrder, Customer
 
 from django.db.models import Q
 
@@ -168,24 +169,18 @@ def single_product(request, product_id):
     Returns: (render): a view of the request, template to use, and product obj
     """
     if request.method == 'POST':
+        opinion = request.POST['opinion']
         current_customer = request.user.id
-        # product_id_number = int(product_id)
-        # print(product_id_number)
+        current_user = User.objects.get(pk=current_customer)
+        current_product = Product.objects.get(pk=product_id)
 
-        if request.POST['like']:
-            like = request.POST['like']
-            # print(like)
-            product = Product.objects.get(pk=product_id)
-            user = User.objects.get(pk=current_customer)
+        try:
+            product_opinion = ProductOpinion.objects.get(product=current_product, customer=current_user)
+        except:
+            product_opinion = ProductOpinion.objects.create(product=current_product, customer=current_user, opinion=opinion)
 
-            liked_product = ProductOpinion.objects.get_or_create(product=product, customer=user ,opinion=like)
-            print('the liked_product object', liked_product)
-            
-            return HttpResponseRedirect('/')
-            # get_or_create returns a tuple of info
-        elif request.POST['dislike']:
-            print("dislike")
-            print(product_id)
+        back_to_product = '/single_product/' + product_id
+        return HttpResponseRedirect(back_to_product)
 
     elif request.method == 'GET':
         template_name = 'single.html'
