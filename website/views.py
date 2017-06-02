@@ -414,6 +414,9 @@ def order_confirmation(request):
     """
     if request.method == 'POST':
 
+        current_customer = request.user.id
+        current_user = User.objects.get(pk=current_customer)
+
         payment_type_id = request.POST['payment_type_id']
         order_id = request.POST['order_id']
 
@@ -423,6 +426,11 @@ def order_confirmation(request):
             prodid.quantity = prodid.quantity - 1
             prodid.quantity_sold = prodid.quantity_sold + 1
             prodid.save()
+
+            try: # any purchased product is automatically liked
+                product_opinion = ProductOpinion.objects.get(product=prodid, customer=current_user)
+            except:
+                product_opinion = ProductOpinion.objects.create(product=prodid, customer=current_user, opinion=1)
 
         completed_order = Order.objects.get(pk=order_id)
         completed_order.payment_type = PaymentType.objects.get(pk=payment_type_id)
@@ -501,37 +509,6 @@ def view_order_detail(request, order_id):
     template_name = 'order_detail.html'
     order = get_object_or_404(Order, pk=order_id)            
     return render(request, template_name, {"order": order, "total": total, "products_in_cart": products_in_cart})
-
-def opinion(request, product_id):
-    """
-    Purpose: to post the user's 'like' or 'dislike' of a product to the database
-    Author: Illegal Team
-    Args: request -- the full HTTP request object, product_id - the id of the product the user interacts with
-    Returns: updated table in the database
-    """
-
-    if request.POST['like']:
-        print(like)
-
-    elif request.POST['dislike']:
-        print(dislike)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def update_profile(request):
