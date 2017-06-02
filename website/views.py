@@ -6,12 +6,14 @@ from django.template import RequestContext
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.generic import TemplateView
 from django.core.exceptions import MultipleObjectsReturned
+from django.contrib.auth.models import User
 from datetime import datetime
 
 from website.forms import UserForm, ProductForm, PaymentTypeForm, OrderForm
 from website.models import Product
 from website.models import ProductType
 from website.models import PaymentType
+from website.models import ProductOpinion
 from website.models import Order, ProductOrder, Customer
 
 from django.db.models import Q
@@ -158,17 +160,32 @@ def list_products(request):
 
 def single_product(request, product_id):
     """
-    purpose: Allows user to view product_detail view, which contains a very specific view
+    Purpose: Allows user to view product_detail view, which contains a very specific view
         for a singular product
         For an example, visit /product_details/1/ to see a view on the first product created
         displaying title, description, quantity, price/unit, and "Add to order" button
-    author: Max Baldridge
-    args: product_id: (integer): id of product we are viewing 
-    returns: (render): a view of the request, template to use, and product obj
-    """        
-    template_name = 'single.html'
-    product = get_object_or_404(Product, pk=product_id)            
-    return render(request, template_name, {"product": product})
+    Author: Max Baldridge
+    Args: product_id: (integer): id of product we are viewing 
+    Returns: (render): a view of the request, template to use, and product obj
+    """
+    if request.method == 'POST':
+        opinion = request.POST['opinion']
+        current_customer = request.user.id
+        current_user = User.objects.get(pk=current_customer)
+        current_product = Product.objects.get(pk=product_id)
+
+        try:
+            product_opinion = ProductOpinion.objects.get(product=current_product, customer=current_user)
+        except:
+            product_opinion = ProductOpinion.objects.create(product=current_product, customer=current_user, opinion=opinion)
+
+        back_to_product = '/single_product/' + product_id
+        return HttpResponseRedirect(back_to_product)
+
+    elif request.method == 'GET':
+        template_name = 'single.html'
+        product = get_object_or_404(Product, pk=product_id)            
+        return render(request, template_name, {"product": product})
 
 
 def list_product_types(request):
@@ -397,6 +414,9 @@ def order_confirmation(request):
     """
     if request.method == 'POST':
 
+        current_customer = request.user.id
+        current_user = User.objects.get(pk=current_customer)
+
         payment_type_id = request.POST['payment_type_id']
         order_id = request.POST['order_id']
 
@@ -406,6 +426,11 @@ def order_confirmation(request):
             prodid.quantity = prodid.quantity - 1
             prodid.quantity_sold = prodid.quantity_sold + 1
             prodid.save()
+
+            try: # any purchased product is automatically liked
+                product_opinion = ProductOpinion.objects.get(product=prodid, customer=current_user)
+            except:
+                product_opinion = ProductOpinion.objects.create(product=prodid, customer=current_user, opinion=1)
 
         completed_order = Order.objects.get(pk=order_id)
         completed_order.payment_type = PaymentType.objects.get(pk=payment_type_id)
