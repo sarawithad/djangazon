@@ -3,28 +3,28 @@
     "model": "website.ProductType",
     "pk": 1,
     "fields": {
-      "product_type_name": "Jordan's Videos"
+      "product_type_name": "Electronics"
     }
   },
   {
     "model": "website.ProductType",
     "pk": 2,
     "fields": {
-      "product_type_name": "Polish T Shirts"
+      "product_type_name": "Home Goods"
     }
   },
   {
     "model": "website.ProductType",
     "pk": 3,
     "fields": {
-      "product_type_name": "Shoes"
+      "product_type_name": "Food & Beverages"
     }
   },
   {
     "model": "website.ProductType",
     "pk": 4,
     "fields": {
-      "product_type_name": "Desktop Fans"
+      "product_type_name": "Clothing"
     }
   }
 
